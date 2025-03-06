@@ -3,5 +3,5 @@
       1
       (* n (factorial (- n 1)))))
       
-;; Ejemplo de uso
-(print (factorial 5))  ;; Debería imprimir 120
+
+(print (factorial 5))  
