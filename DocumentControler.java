@@ -3,7 +3,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Stack;
 
-
 public class DocumentControler{
 
     private String path;
@@ -13,8 +12,8 @@ public class DocumentControler{
     
     }
 
-    public String ReadDocument(){ //Lee el archivo de Lisp y regresa de forma de cadena su contenido
-        StringBuilder content = new StringBuilder(this.path);
+    public String ReadDocument(){ 
+        StringBuilder content = new StringBuilder();
         try(BufferedReader reader = new BufferedReader(new FileReader(path))){
             String line;
             while ((line = reader.readLine())!= null) {
@@ -27,12 +26,11 @@ public class DocumentControler{
         return content.toString();
     }
 
-    public Stack<String> processCodeLisp() {
-        String code = ReadDocument();
-        StructureValidator.validateSyntax(code);
-        Tokenizer tokenizer = new Tokenizer();
-        return tokenizer.tokenize(code);
+    public Stack<String> processLispCode() {
+        String code = ReadDocument(); 
+        StructureValidator.validateSyntax(code); 
+        Tokenizer tokenizer = new Tokenizer(); 
+        return tokenizer.tokenize(code); 
     }
-
 
 }
