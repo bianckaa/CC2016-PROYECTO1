@@ -1,7 +1,1 @@
-(defun factorial (n)
-  (if (<= n 1)
-      1
-      (* n (factorial (- n 1)))))
-      
-
-(print (factorial 5))  
+(quote (1 (2 3) 4))

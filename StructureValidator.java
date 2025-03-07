@@ -19,7 +19,7 @@ public class StructureValidator {
     }
 
     public static boolean CorrectStructure(String code) {
-        if (code.contains("()")) {
+        if (code.contains("( )")) {
             return false;
         }
         return true;

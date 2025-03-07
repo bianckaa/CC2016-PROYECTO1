@@ -1,7 +1,7 @@
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-public class Tokenizer {
+public class Tokenizador {
 
     public Stack<String> tokenize(String code) {
         code = code.replace("(", " ( ").replace(")", " ) ")
