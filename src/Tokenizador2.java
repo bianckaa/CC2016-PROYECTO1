@@ -20,7 +20,7 @@ public class Tokenizador2 {
             }
 
             
-            if (ch == '(' || ch == ')') { // Ver como manejar los parentesis al momento de tokenizar
+            if (ch == '(' || ch == ')') { 
                 tokens.push(String.valueOf(ch));
                 i++;
                 continue;
@@ -32,16 +32,55 @@ public class Tokenizador2 {
                 i += 5;
 
                 
-                while (i < n && Character.isWhitespace(code.charAt(i))) { //despues de un quote ignorar los espacios para tomar como un solo token
+                while (i < n && Character.isWhitespace(code.charAt(i))) { 
                     i++;
                 }
 
-                // Verificar que lo que sigue sea la apretura de parentesis
+                
                 if (i >= n || code.charAt(i) != '(') {
                     throw new IllegalArgumentException("Error: quote debe ir seguido de una expresion entre parentesis");
                 }
 
-                // Capturar todo hasta el parentesis de cierre correspondiente
+                
+                int balance = 1;
+                int start = i;
+                i++;
+
+                while (i < n && balance > 0) {
+                    if (code.charAt(i) == '(') balance++;
+                    if (code.charAt(i) == ')') balance--;
+                    i++;
+                }
+
+                if (balance != 0) {
+                    throw new IllegalArgumentException("Error: Parentesis no balanceados ");
+                }
+
+                
+                String quoteBlock = code.substring(start, i);
+                tokens.push("quote");
+                tokens.push(quoteBlock);
+                continue;
+            }
+
+            if (code.startsWith("'", i)) {
+                i += 1; 
+
+                
+                if (i >= n || code.charAt(i) != '(') {
+                    throw new IllegalArgumentException("Error: debe de ir pegado el apostrofe con un parentesis");
+                }
+
+                
+                while (i < n && Character.isWhitespace(code.charAt(i))) {
+                    i++;
+                }
+
+                
+                if (i >= n || code.charAt(i) != '(') {
+                    throw new IllegalArgumentException("Error: quote debe ir seguido de una expresion entre los parentesis");
+                }
+
                 int balance = 1;
                 int start = i;
                 i++;
@@ -56,13 +95,116 @@ public class Tokenizador2 {
                     throw new IllegalArgumentException("Error: Parentesis no balanceados después de quote");
                 }
 
-                // Agregar el quote y su bloque como tokens
+                
                 String quoteBlock = code.substring(start, i);
                 tokens.push("quote");
                 tokens.push(quoteBlock);
                 continue;
             }
 
+            if (code.startsWith("defun", i)) {
+                i += 5;
+            
+                while (i < n && Character.isWhitespace(code.charAt(i))) {
+                    i++;
+                }
+            
+                int start = i;
+                while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(') {
+                    i++;
+                }
+                String nombreFuncion = code.substring(start, i);
+                tokens.push("defun");
+                tokens.push(nombreFuncion);
+            
+                while (i < n && Character.isWhitespace(code.charAt(i))) {
+                    i++;
+                }
+            
+                if (i >= n || code.charAt(i) != '(') {
+                    throw new IllegalArgumentException("Error: defun debe ir seguido de una lista de parametros entre parentesis");
+                }
+            
+                tokens.push("(");
+                i++;
+            
+                while (i < n && code.charAt(i) != ')') {
+                    if (Character.isWhitespace(code.charAt(i))) {
+                        i++;
+                        continue;
+                    }
+            
+                    start = i;
+                    while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != ')') {
+                        i++;
+                    }
+                    String parametro = code.substring(start, i);
+                    tokens.push(parametro);
+                }
+            
+                if (i >= n || code.charAt(i) != ')') {
+                    throw new IllegalArgumentException("Error: Parentesis no balanceados ");
+                }
+                tokens.push(")");
+                i++;
+            
+                while (i < n && Character.isWhitespace(code.charAt(i))) {
+                    i++;
+                }
+            
+                
+                if (i >= n) {
+                    throw new IllegalArgumentException("Error: El cuerpo de la funcion no puede estar vacio");
+                }
+            
+                if (code.charAt(i) == '(') {
+                   
+                    tokens.push("(");
+                    i++;
+            
+                    while (i < n && code.charAt(i) != ')') {
+                        if (Character.isWhitespace(code.charAt(i))) {
+                            i++;
+                            continue;
+                        }
+            
+                        if (code.charAt(i) == '(') {
+                            tokens.push("(");
+                            i++;
+                            continue;
+                        }
+            
+                        if (code.charAt(i) == ')') {
+                            tokens.push(")");
+                            i++;
+                            continue;
+                        }
+            
+                        start = i;
+                        while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
+                            i++;
+                        }
+                        String tokenCuerpo = code.substring(start, i);
+                        tokens.push(tokenCuerpo);
+                    }
+            
+                    if (i >= n || code.charAt(i) != ')') {
+                        throw new IllegalArgumentException("Error: Parentesis no balanceados en el cuerpo de la funcion");
+                    }
+                    tokens.push(")");
+                    i++;
+                } else {
+                    
+                    start = i;
+                    while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != ')') {
+                        i++;
+                    }
+                    String cuerpo = code.substring(start, i);
+                    tokens.push(cuerpo);
+                }
+            
+                continue;
+            }
             
             
             while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
@@ -70,6 +212,7 @@ public class Tokenizador2 {
                 i++;
             }
             tokens.push(token.toString());
+            token.setLength(0);
         }
 
         return tokens;
