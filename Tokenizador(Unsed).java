@@ -1,7 +1,7 @@
 import java.util.Stack;
+///Tokenizador descartado
 
-
-public class Tokenizador2 {
+public class Tokenizador(Unsed){
 
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
@@ -12,7 +12,6 @@ public class Tokenizador2 {
         while (i < n) {
             char ch = code.charAt(i);
 
-           
             if (Character.isWhitespace(ch)) {  
                 i++;
                 continue;
