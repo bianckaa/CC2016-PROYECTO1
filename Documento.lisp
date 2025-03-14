@@ -1,1 +1,4 @@
-(quote (1 (2 3) 4))
+(cond
+  ((> x 0) "positivo")
+  ((< x 0) "negativo")
+  (t "cero"))
