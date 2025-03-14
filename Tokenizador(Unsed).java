@@ -1,7 +1,7 @@
 import java.util.Stack;
 ///Tokenizador descartado
 
-public class Tokenizador(Unsed){
+public class Tokenizador2{
 
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
