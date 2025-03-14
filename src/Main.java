@@ -1,4 +1,4 @@
-package src;
+
 import java.util.Stack;
 
 ///Prueb para mostrar el tokenizador con
