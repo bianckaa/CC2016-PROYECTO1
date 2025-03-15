@@ -1,7 +1,7 @@
 
 import java.util.Stack;
 
-///Prueb para mostrar el tokenizador con
+///Prueba para mostrar el tokenizador con
 ///  el document controler aparte
 public class Main {
     public static void main(String[] args) {
@@ -11,8 +11,29 @@ public class Main {
         try {
             Stack<String> tokens = controller.processLispCode(); 
             System.out.println("Tokens generados:");
+
+            
+            String previousToken = null;
+
             while (!tokens.isEmpty()) {
-                System.out.println(tokens.pop()); 
+                String token = tokens.pop();
+                System.out.println("Token: " + token);
+
+                
+                if (token.equals("'") || token.equals("quote")) {
+                    if (previousToken != null) {
+                        
+                        try {
+                            Object result = QuoteEvaluator.evaluateQuote(previousToken);
+                            System.out.println("Resultado de ' (quote): " + result);
+                        } catch (IllegalArgumentException e) {
+                            System.err.println("Error en el quote: " + e.getMessage());
+                        }
+                    }
+                }
+
+                
+                previousToken = token;
             }
         } catch (IllegalArgumentException e) {
             System.err.println("Error de sintaxis: " + e.getMessage());
