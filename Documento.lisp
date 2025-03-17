@@ -1,3 +1,1 @@
-(quote (Hola a))
-(' (c Hola))
-(' c)
+(print (QUOTE (())))

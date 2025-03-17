@@ -27,7 +27,7 @@ public class Tokenizador2 {
             }
 
             
-            if (code.startsWith("quote", i)) {
+            if (code.toLowerCase().startsWith("quote", i)) {
                 
                 i += 5;
 
@@ -67,9 +67,9 @@ public class Tokenizador2 {
                 i += 1; 
 
                 
-                if (i >= n || code.charAt(i) != '(') {
+                /**if (i >= n || code.charAt(i) != '(') {
                     throw new IllegalArgumentException("Error: debe de ir pegado el apostrofe con un parentesis");
-                }
+                }*/
 
                 
                 while (i < n && Character.isWhitespace(code.charAt(i))) {

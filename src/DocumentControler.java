@@ -30,7 +30,7 @@ public class DocumentControler{
     public Stack<String> processLispCode() {
         String code = ReadDocument(); 
         StructureValidator.validateSyntax(code); 
-        Tokenizador tokenizer = new Tokenizador(); 
+        Tokenizador2 tokenizer = new Tokenizador2(); 
         return tokenizer.tokenize(code); 
     }
 
