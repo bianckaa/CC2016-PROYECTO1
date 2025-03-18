@@ -1,7 +1,6 @@
 import java.util.Stack;
 
 public class Tokenizador2 {
-
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
         int i = 0;
@@ -11,7 +10,11 @@ public class Tokenizador2 {
         while (i < n) {
             char ch = code.charAt(i);
 
+<<<<<<< HEAD
             if (Character.isWhitespace(ch)) {
+=======
+            if (Character.isWhitespace(ch)) {  
+>>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
                 i++;
                 continue;
             }
@@ -22,6 +25,7 @@ public class Tokenizador2 {
                 continue;
             }
 
+<<<<<<< HEAD
             if (code.startsWith("quote", i)) {
                 i += 5;
 
@@ -50,10 +54,17 @@ public class Tokenizador2 {
                 String quoteBlock = code.substring(start, i);
                 tokens.push("quote");
                 tokens.push(quoteBlock);
+=======
+            // Manejo de Quote
+            if (code.toLowerCase().startsWith("quote", i)) {
+                i += 5;
+                i = handleQuote(code, i, tokens);
+>>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
                 continue;
             }
 
             if (code.startsWith("'", i)) {
+<<<<<<< HEAD
                 i += 1;
 
                 if (i >= n || code.charAt(i) != '(') {
@@ -85,9 +96,15 @@ public class Tokenizador2 {
                 String quoteBlock = code.substring(start, i);
                 tokens.push("quote");
                 tokens.push(quoteBlock);
+=======
+                i += 1; 
+                
+                i = handleQuote(code, i, tokens);
+>>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
                 continue;
             }
 
+            // Manejo de Defun
             if (code.startsWith("defun", i)) {
                 i += 5;
 
@@ -188,7 +205,11 @@ public class Tokenizador2 {
 
                 continue;
             }
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
             while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
                 token.append(code.charAt(i));
                 i++;
@@ -203,10 +224,10 @@ public class Tokenizador2 {
 
             token.setLength(0); 
         }
-
         return tokens;
     }
 
+<<<<<<< HEAD
 
     public boolean esOperadorValido(String token) {
         return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/");
@@ -231,5 +252,53 @@ public class Tokenizador2 {
         }
         String primerToken = tokens.peek();
         return esOperadorValido(primerToken);
+=======
+    private int handleQuote(String code, int startIndex, Stack<String> tokens) {
+        int i = startIndex;
+        int n = code.length();
+
+        while (i < n && Character.isWhitespace(code.charAt(i))) {
+            i++;
+        }
+
+        // Caso 1: (QUOTE ...)
+        if (code.charAt(i) == '(') {
+            int balance = 1;
+            int start = i;
+            i++;
+    
+            while (i < n && balance > 0) {
+                if (code.charAt(i) == '(') balance++;
+                if (code.charAt(i) == ')') balance--;
+                i++;
+            }
+    
+            if (balance != 0) {
+                throw new IllegalArgumentException("Error: Paréntesis no balanceados después de quote");
+            }
+    
+            
+            String quoteBlock = code.substring(start, i);
+            tokens.push("quote");
+            tokens.push(quoteBlock);
+        }
+
+        // Caso 2: (' z)
+        else {
+            StringBuilder token = new StringBuilder();
+            while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
+                token.append(code.charAt(i));
+                i++;
+            }
+    
+            if (token.length() == 0) {
+                throw new IllegalArgumentException("Error: La forma abreviada de quote debe ir seguida de un token");
+            }
+    
+            tokens.push("quote");
+            tokens.push(token.toString());
+        } 
+        return i; 
+>>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
     }
 }

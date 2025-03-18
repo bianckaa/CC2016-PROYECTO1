@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainQuote",
+            "request": "launch",
+            "mainClass": "MainQuote",
+            "projectName": "Repositorio_9f0a309c"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
@@ -10,7 +17,7 @@
         },
         {
             "type": "java",
-            "name": "Main",
+            "name": "Ejecutar Main",
             "request": "launch",
             "mainClass": "Main",
             "projectName": "Repositorio",
