@@ -1,26 +1,21 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "echo",
-            "type": "shell",
-            "command": "echo Hello"
-        }, 
         {
             "label": "Compilar Java",
             "type": "shell",
             "command": "javac",
             "args": [
                 "-d", "bin",
-                "src/*.java"
+                "-cp", "bin",
+                "${workspaceFolder}/src/**/*.java"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "Compilar los archivos Java y colocarlos en la carpeta bin."
+            "problemMatcher": ["$javac"],
+            "detail": "Compila las clases Java y las coloca en la carpeta bin."
         }
     ]
 }

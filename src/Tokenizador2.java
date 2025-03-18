@@ -1,4 +1,3 @@
-
 import java.util.Stack;
 ///Tokenizador descartado
 
@@ -25,82 +24,21 @@ public class Tokenizador2{
                 continue;
             }
 
-            
-            if (code.startsWith("quote", i)) {
-                
+            // Manejo de Quote
+            if (code.toLowerCase().startsWith("quote", i)) {
                 i += 5;
-
-                
-                while (i < n && Character.isWhitespace(code.charAt(i))) { 
-                    i++;
-                }
-
-                
-                if (i >= n || code.charAt(i) != '(') {
-                    throw new IllegalArgumentException("Error: quote debe ir seguido de una expresion entre parentesis");
-                }
-
-                
-                int balance = 1;
-                int start = i;
-                i++;
-
-                while (i < n && balance > 0) {
-                    if (code.charAt(i) == '(') balance++;
-                    if (code.charAt(i) == ')') balance--;
-                    i++;
-                }
-
-                if (balance != 0) {
-                    throw new IllegalArgumentException("Error: Parentesis no balanceados ");
-                }
-
-                
-                String quoteBlock = code.substring(start, i);
-                tokens.push("quote");
-                tokens.push(quoteBlock);
+                i = QuoteEvaluator.handleQuote(code, i, tokens);
                 continue;
             }
 
             if (code.startsWith("'", i)) {
                 i += 1; 
-
                 
-                if (i >= n || code.charAt(i) != '(') {
-                    throw new IllegalArgumentException("Error: debe de ir pegado el apostrofe con un parentesis");
-                }
-
-                
-                while (i < n && Character.isWhitespace(code.charAt(i))) {
-                    i++;
-                }
-
-                
-                if (i >= n || code.charAt(i) != '(') {
-                    throw new IllegalArgumentException("Error: quote debe ir seguido de una expresion entre los parentesis");
-                }
-
-                int balance = 1;
-                int start = i;
-                i++;
-
-                while (i < n && balance > 0) {
-                    if (code.charAt(i) == '(') balance++;
-                    if (code.charAt(i) == ')') balance--;
-                    i++;
-                }
-
-                if (balance != 0) {
-                    throw new IllegalArgumentException("Error: Parentesis no balanceados después de quote");
-                }
-
-                
-                String quoteBlock = code.substring(start, i);
-                tokens.push("quote");
-                tokens.push(quoteBlock);
+                i = QuoteEvaluator.handleQuote(code, i, tokens);
                 continue;
             }
 
+            // Manejo de "defun"
             if (code.startsWith("defun", i)) {
                 i += 5;
             
@@ -157,7 +95,6 @@ public class Tokenizador2{
                 }
             
                 if (code.charAt(i) == '(') {
-                   
                     tokens.push("(");
                     i++;
             
@@ -205,7 +142,6 @@ public class Tokenizador2{
                 continue;
             }
             
-            
             while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
                 token.append(code.charAt(i));
                 i++;
@@ -213,7 +149,6 @@ public class Tokenizador2{
             tokens.push(token.toString());
             token.setLength(0);
         }
-
         return tokens;
     }
 }

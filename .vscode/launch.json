@@ -3,10 +3,10 @@
     "configurations": [
         {
             "type": "java",
-            "name": "MainPre",
+            "name": "MainQuote",
             "request": "launch",
-            "mainClass": "MainPre",
-            "projectName": "CC2016-PROYECTO1_3862303b"
+            "mainClass": "MainQuote",
+            "projectName": "Repositorio_9f0a309c"
         },
         {
             "type": "java",
@@ -17,7 +17,7 @@
         },
         {
             "type": "java",
-            "name": "Main",
+            "name": "Ejecutar Main",
             "request": "launch",
             "mainClass": "Main",
             "projectName": "Repositorio",
