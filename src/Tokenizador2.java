@@ -25,18 +25,18 @@ public class Tokenizador2 {
             // Manejo de Quote
             if (code.toLowerCase().startsWith("quote", i)) {
                 i += 5;
-                i = QuoteEvaluator.handleQuote(code, i, tokens);
+                i = handleQuote(code, i, tokens);
                 continue;
             }
 
             if (code.startsWith("'", i)) {
                 i += 1; 
                 
-                i = QuoteEvaluator.handleQuote(code, i, tokens);
+                i = handleQuote(code, i, tokens);
                 continue;
             }
 
-            // Manejo de "defun"
+            // Manejo de Defun
             if (code.startsWith("defun", i)) {
                 i += 5;
             
@@ -148,5 +148,53 @@ public class Tokenizador2 {
             token.setLength(0);
         }
         return tokens;
+    }
+
+    private int handleQuote(String code, int startIndex, Stack<String> tokens) {
+        int i = startIndex;
+        int n = code.length();
+
+        while (i < n && Character.isWhitespace(code.charAt(i))) {
+            i++;
+        }
+
+        // Caso 1: (QUOTE ...)
+        if (code.charAt(i) == '(') {
+            int balance = 1;
+            int start = i;
+            i++;
+    
+            while (i < n && balance > 0) {
+                if (code.charAt(i) == '(') balance++;
+                if (code.charAt(i) == ')') balance--;
+                i++;
+            }
+    
+            if (balance != 0) {
+                throw new IllegalArgumentException("Error: Paréntesis no balanceados después de quote");
+            }
+    
+            
+            String quoteBlock = code.substring(start, i);
+            tokens.push("quote");
+            tokens.push(quoteBlock);
+        }
+
+        // Caso 2: (' z)
+        else {
+            StringBuilder token = new StringBuilder();
+            while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
+                token.append(code.charAt(i));
+                i++;
+            }
+    
+            if (token.length() == 0) {
+                throw new IllegalArgumentException("Error: La forma abreviada de quote debe ir seguida de un token");
+            }
+    
+            tokens.push("quote");
+            tokens.push(token.toString());
+        } 
+        return i; 
     }
 }
