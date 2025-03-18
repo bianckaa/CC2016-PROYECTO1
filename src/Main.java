@@ -1,10 +1,11 @@
+
 import java.util.Stack;
 
 ///Prueb para mostrar el tokenizador con
 ///  el document controler aparte
 public class Main {
     public static void main(String[] args) {
-        String filePath = "Documento.lisp"; 
+        String filePath = "src/Documento.lisp"; 
         DocumentControler controller = new DocumentControler(filePath);
 
         try {
@@ -19,4 +20,6 @@ public class Main {
             System.err.println("Error: " + e.getMessage());
         }
     }
+
+    
 }
