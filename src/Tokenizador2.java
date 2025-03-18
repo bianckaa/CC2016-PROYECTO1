@@ -1,9 +1,6 @@
-
 import java.util.Stack;
 
-
 public class Tokenizador2 {
-
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
         int i = 0;
@@ -13,7 +10,6 @@ public class Tokenizador2 {
         while (i < n) {
             char ch = code.charAt(i);
 
-           
             if (Character.isWhitespace(ch)) {  
                 i++;
                 continue;
@@ -28,9 +24,7 @@ public class Tokenizador2 {
 
             
             if (code.toLowerCase().startsWith("quote", i)) {
-                
                 i += 5;
-
                 
                 while (i < n && Character.isWhitespace(code.charAt(i))) { 
                     i++;
@@ -55,7 +49,6 @@ public class Tokenizador2 {
                 if (balance != 0) {
                     throw new IllegalArgumentException("Error: Parentesis no balanceados ");
                 }
-
                 
                 String quoteBlock = code.substring(start, i);
                 tokens.push("quote");
@@ -65,12 +58,10 @@ public class Tokenizador2 {
 
             if (code.startsWith("'", i)) {
                 i += 1; 
-
                 
                 /**if (i >= n || code.charAt(i) != '(') {
                     throw new IllegalArgumentException("Error: debe de ir pegado el apostrofe con un parentesis");
                 }*/
-
                 
                 while (i < n && Character.isWhitespace(code.charAt(i))) {
                     i++;
@@ -90,11 +81,10 @@ public class Tokenizador2 {
                     if (code.charAt(i) == ')') balance--;
                     i++;
                 }
-
+                
                 if (balance != 0) {
                     throw new IllegalArgumentException("Error: Parentesis no balanceados después de quote");
                 }
-
                 
                 String quoteBlock = code.substring(start, i);
                 tokens.push("quote");
@@ -158,7 +148,6 @@ public class Tokenizador2 {
                 }
             
                 if (code.charAt(i) == '(') {
-                   
                     tokens.push("(");
                     i++;
             
@@ -214,7 +203,6 @@ public class Tokenizador2 {
             tokens.push(token.toString());
             token.setLength(0);
         }
-
         return tokens;
     }
 }

@@ -1,9 +1,8 @@
-
 import java.util.Stack;
 
 ///Prueba para mostrar el tokenizador con
 ///  el document controler aparte
-public class Main {
+public class MainQuote {
     public static void main(String[] args) {
         String filePath = "Documento.lisp"; 
         DocumentControler controller = new DocumentControler(filePath);

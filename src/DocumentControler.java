@@ -5,12 +5,10 @@ import java.io.IOException;
 import java.util.Stack;
 
 public class DocumentControler{
-
     private String path;
 
     public DocumentControler(String path){
         this.path = path;
-    
     }
 
     public String ReadDocument(){ 
