@@ -103,7 +103,7 @@ public class Tokenizador2{
                 continue;
             }
 
-            // Manejo de Defun
+            /*// Manejo de Defun
             if (code.startsWith("defun", i)) {
                 i += 5;
 
