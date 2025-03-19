@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainSetq",
+            "request": "launch",
+            "mainClass": "MainSetq",
+            "projectName": "Repositorio_9f0a309c"
+        },
+        {
+            "type": "java",
             "name": "MainPre",
             "request": "launch",
             "mainClass": "MainPre",
