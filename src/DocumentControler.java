@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,6 +29,12 @@ public class DocumentControler{
         StructureValidator.validateSyntax(code); 
         Tokenizador2 tokenizer = new Tokenizador2(); 
         return tokenizer.tokenize(code); 
+    }
+
+    public Object evaluarCodigoLisp() {
+        Stack<String> tokens = processLispCode();
+        EvaluadorPre evaluador = new EvaluadorPre();
+        return evaluador.evaluar(tokens);
     }
 
 }

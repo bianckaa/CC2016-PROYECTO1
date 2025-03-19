@@ -29,36 +29,13 @@ public class Tokenizador2{
 
             // Manejo de '
             if (code.startsWith("'", i)) {
-                i += 1;
-
-                // Verificar si el siguiente token es un predicado (ATOM, LIST, EQUAL, <, >)
-                int nextTokenStart = i;
-                while (nextTokenStart < n && Character.isWhitespace(code.charAt(nextTokenStart))) {
-                    nextTokenStart++;
-                }
-
-                // Extraer el siguiente token
-                StringBuilder nextToken = new StringBuilder();
-                while (nextTokenStart < n && !Character.isWhitespace(code.charAt(nextTokenStart)) && 
-                       code.charAt(nextTokenStart) != '(' && code.charAt(nextTokenStart) != ')') {
-                    nextToken.append(code.charAt(nextTokenStart));
-                    nextTokenStart++;
-                }
-
-                // Si el siguiente token es un predicado, no convertir ' en quote
-                if (nextToken.toString().equals("ATOM") || nextToken.toString().equals("LIST") || 
-                    nextToken.toString().equals("EQUAL") || nextToken.toString().equals("<") || 
-                    nextToken.toString().equals(">")) {
-                    tokens.push("'"); // Dejar el ' como un token independiente
-                    i = nextTokenStart; // Continuar desde el inicio del siguiente token
-                } else {
-                    // Convertir ' en quote
-                    i = handleQuote(code, i, tokens);
-                }
+                i += 1; 
+                
+                i = handleQuote(code, i, tokens);
                 continue;
             }
 
-            // Manejo de Setq
+            
             if (code.startsWith("setq", i)) {
                 i += 4; 
                 tokens.push("setq"); 
