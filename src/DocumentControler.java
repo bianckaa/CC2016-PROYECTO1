@@ -5,12 +5,10 @@ import java.io.IOException;
 import java.util.Stack;
 
 public class DocumentControler{
-
     private String path;
 
     public DocumentControler(String path){
         this.path = path;
-    
     }
 
     public String ReadDocument(){ 
@@ -30,7 +28,7 @@ public class DocumentControler{
     public Stack<String> processLispCode() {
         String code = ReadDocument(); 
         StructureValidator.validateSyntax(code); 
-        Tokenizador tokenizer = new Tokenizador(); 
+        Tokenizador2 tokenizer = new Tokenizador2(); 
         return tokenizer.tokenize(code); 
     }
 
