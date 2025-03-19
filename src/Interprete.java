@@ -3,10 +3,12 @@ import java.util.Stack;
 public class Interprete {
     private DocumentControler controller;
     private VariableManagement<Object> variableManager;
+    private PredicateEvaluator predicateEvaluator;
 
     public Interprete(String filePath) {
         controller = new DocumentControler(filePath);
         variableManager = new VariableManagement<>();
+        predicateEvaluator = new PredicateEvaluator();
     }
 
     public void interpretar() {
@@ -42,6 +44,15 @@ public class Interprete {
                     }
                 }
 
+                else if (esPredicado(token)) {
+                    try {
+                        Object result = predicateEvaluator.evaluarPredicado(token, orderedTokens);
+                        System.out.println("Resultado del predicado " + token + ": " + result);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Error en el predicado " + token + ": " + e.getMessage());
+                    }
+                }
+
                 // Otras implementaciones (Defun, COND, etc.)
             }
         } catch (IllegalArgumentException e) {
@@ -49,5 +60,10 @@ public class Interprete {
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
+    }
+
+    private boolean esPredicado(String token) {
+        return token.equals("ATOM") || token.equals("LIST") || token.equals("EQUAL") || 
+               token.equals("<") || token.equals(">");
     }
 }

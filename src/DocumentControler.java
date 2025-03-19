@@ -31,10 +31,6 @@ public class DocumentControler{
         return tokenizer.tokenize(code); 
     }
 
-    public Object evaluarCodigoLisp() {
-        Stack<String> tokens = processLispCode();
-        EvaluadorPre evaluador = new EvaluadorPre();
-        return evaluador.evaluar(tokens);
-    }
+   
 
 }
