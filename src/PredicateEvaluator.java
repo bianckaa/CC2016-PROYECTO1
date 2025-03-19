@@ -1,74 +1,45 @@
-
 import java.util.Stack;
-
 
 public class PredicateEvaluator {
 
-   
-    public boolean isAtom(Stack<String> tokens) {
-        
-        if (!tokens.pop().equals("ATOM")) {
-            throw new IllegalArgumentException("Sintaxis incorrecta para ATOM.");
-        }
-
+    public Object isAtom(Stack<String> tokens) {
+        if (tokens.isEmpty()) throw new IllegalArgumentException("Faltan argumentos en ATOM");
         String expresion = tokens.pop();
-        return !expresion.startsWith("(");
+        return (expresion.startsWith("(") && expresion.endsWith(")")) ? "NIL" : "T";
     }
 
-    
-    public boolean isList(Stack<String> tokens) {
-        
-        if (!tokens.pop().equals("LIST")) {
-            throw new IllegalArgumentException("Sintaxis incorrecta para LIST.");
-        }
+    public Object isList(Stack<String> tokens) {
+        if (tokens.isEmpty()) throw new IllegalArgumentException("Faltan argumentos en LISTP");
         String expresion = tokens.pop();
-        return expresion.startsWith("(");
+        return (expresion.startsWith("(") && expresion.endsWith(")")) ? "T" : "NIL";
     }
 
-   
-    public boolean isEqual(Stack<String> tokens) {
-        
-        if (!tokens.pop().equals("EQUAL")) {
-            throw new IllegalArgumentException("Sintaxis incorrecta para EQUAL.");
-    
-        }
-
+    public Object isEqual(Stack<String> tokens) {
+        if (tokens.size() < 2) throw new IllegalArgumentException("Faltan argumentos en EQUAL");
         String expresion1 = tokens.pop();
         String expresion2 = tokens.pop();
-        return expresion1.equals(expresion2);
+        return expresion1.equals(expresion2) ? "T" : "NIL";
     }
 
-   
-    public boolean isLessThan(Stack<String> tokens) {
-        
-        if (!tokens.pop().equals("<")) {
-            throw new IllegalArgumentException("Sintaxis incorrecta para <.");
+    public Object isLessThan(Stack<String> tokens) {
+        if (tokens.size() < 2) throw new IllegalArgumentException("Faltan argumentos en <");
+        try {
+            double num1 = Double.parseDouble(tokens.pop());
+            double num2 = Double.parseDouble(tokens.pop());
+            return num1 < num2 ? "T" : "NIL";
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Los argumentos de < deben ser numeros");
         }
-
-       
-        String expresion1 = tokens.pop();
-        String expresion2 = tokens.pop();
-
-        
-        double num1 = Double.parseDouble(expresion1);
-        double num2 = Double.parseDouble(expresion2);
-        return num1 < num2;
     }
 
-   
-    public boolean isGreaterThan(Stack<String> tokens) {
-       
-        if (!tokens.pop().equals(">")) {
-            throw new IllegalArgumentException("Sintaxis incorrecta para >.");
+    public Object isGreaterThan(Stack<String> tokens) {
+        if (tokens.size() < 2) throw new IllegalArgumentException("Faltan argumentos en >");
+        try {
+            double num1 = Double.parseDouble(tokens.pop());
+            double num2 = Double.parseDouble(tokens.pop());
+            return num1 > num2 ? "T" : "NIL";
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Los argumentos de > deben ser numeros");
         }
-
-        
-        String expresion1 = tokens.pop();
-        String expresion2 = tokens.pop();
-
-       
-        double num1 = Double.parseDouble(expresion1);
-        double num2 = Double.parseDouble(expresion2);
-        return num1 > num2;
     }
 }

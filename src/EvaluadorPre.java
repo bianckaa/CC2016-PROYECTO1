@@ -1,11 +1,9 @@
 import java.util.Stack;
 
-
-public class EvaluadorPre{
+public class EvaluadorPre {
 
     private PredicateEvaluator predicateEvaluator = new PredicateEvaluator();
 
-    
     public Object evaluar(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("No hay tokens para evaluar.");
@@ -13,7 +11,28 @@ public class EvaluadorPre{
 
         String token = tokens.pop();
 
-        switch (token) {
+        if (token.equals("(")) {
+            return evaluarExpresionAnidada(tokens);
+        } else if (token.equals(")")) {
+            return evaluar(tokens);
+        } else if (token.equals("ATOM") || token.equals("LIST") || token.equals("EQUAL") || token.equals("<") || token.equals(">")) {
+            return evaluarPredicado(token, tokens);
+        } else {
+            return token;
+        }
+    }
+
+    private Object evaluarExpresionAnidada(Stack<String> tokens) {
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Expresion incompleta.");
+        }
+
+        String predicado = tokens.pop();
+        return evaluarPredicado(predicado, tokens);
+    }
+
+    private Object evaluarPredicado(String predicado, Stack<String> tokens) {
+        switch (predicado) {
             case "ATOM":
                 return predicateEvaluator.isAtom(tokens);
             case "LIST":
@@ -24,28 +43,8 @@ public class EvaluadorPre{
                 return predicateEvaluator.isLessThan(tokens);
             case ">":
                 return predicateEvaluator.isGreaterThan(tokens);
-            case "(":
-                
-                return evaluarExpresionAnidada(tokens);
-            case ")":
-                
-                return null;
             default:
-                
-                return token;
+                throw new IllegalArgumentException("Predicado no valido: " + predicado);
         }
-    }
-
-    
-    private Object evaluarExpresionAnidada(Stack<String> tokens) {
-        
-        Object resultado = null;
-        while (!tokens.isEmpty() && !tokens.peek().equals(")")) {
-            resultado = evaluar(tokens);
-        }
-        if (!tokens.isEmpty() && tokens.peek().equals(")")) {
-            tokens.pop(); 
-        }
-        return resultado;
     }
 }
