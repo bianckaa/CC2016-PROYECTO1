@@ -1,11 +1,10 @@
 import java.util.Stack;
 
-public class Tokenizador2 {
+public class Tokenizador2{
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
         int i = 0;
         int n = code.length();
-        StringBuilder token = new StringBuilder();
 
         while (i < n) {
             char ch = code.charAt(i);
@@ -15,8 +14,7 @@ public class Tokenizador2 {
                 continue;
             }
 
-            
-            if (ch == '(' || ch == ')') { 
+            if (ch == '(' || ch == ')') {
                 tokens.push(String.valueOf(ch));
                 i++;
                 continue;
@@ -29,10 +27,34 @@ public class Tokenizador2 {
                 continue;
             }
 
+            // Manejo de '
             if (code.startsWith("'", i)) {
-                i += 1; 
-                
-                i = handleQuote(code, i, tokens);
+                i += 1;
+
+                // Verificar si el siguiente token es un predicado (ATOM, LIST, EQUAL, <, >)
+                int nextTokenStart = i;
+                while (nextTokenStart < n && Character.isWhitespace(code.charAt(nextTokenStart))) {
+                    nextTokenStart++;
+                }
+
+                // Extraer el siguiente token
+                StringBuilder nextToken = new StringBuilder();
+                while (nextTokenStart < n && !Character.isWhitespace(code.charAt(nextTokenStart)) && 
+                       code.charAt(nextTokenStart) != '(' && code.charAt(nextTokenStart) != ')') {
+                    nextToken.append(code.charAt(nextTokenStart));
+                    nextTokenStart++;
+                }
+
+                // Si el siguiente token es un predicado, no convertir ' en quote
+                if (nextToken.toString().equals("ATOM") || nextToken.toString().equals("LIST") || 
+                    nextToken.toString().equals("EQUAL") || nextToken.toString().equals("<") || 
+                    nextToken.toString().equals(">")) {
+                    tokens.push("'"); // Dejar el ' como un token independiente
+                    i = nextTokenStart; // Continuar desde el inicio del siguiente token
+                } else {
+                    // Convertir ' en quote
+                    i = handleQuote(code, i, tokens);
+                }
                 continue;
             }
 
@@ -81,15 +103,14 @@ public class Tokenizador2 {
                 continue;
             }
 
-
-            /*// Manejo de Defun
+            // Manejo de Defun
             if (code.startsWith("defun", i)) {
                 i += 5;
-            
+
                 while (i < n && Character.isWhitespace(code.charAt(i))) {
                     i++;
                 }
-            
+
                 int start = i;
                 while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(') {
                     i++;
@@ -97,24 +118,24 @@ public class Tokenizador2 {
                 String nombreFuncion = code.substring(start, i);
                 tokens.push("defun");
                 tokens.push(nombreFuncion);
-            
+
                 while (i < n && Character.isWhitespace(code.charAt(i))) {
                     i++;
                 }
-            
+
                 if (i >= n || code.charAt(i) != '(') {
-                    throw new IllegalArgumentException("Error: defun debe ir seguido de una lista de parametros entre parentesis");
+                    throw new IllegalArgumentException("Error: defun debe ir seguido de una lista de parámetros entre paréntesis");
                 }
-            
+
                 tokens.push("(");
                 i++;
-            
+
                 while (i < n && code.charAt(i) != ')') {
                     if (Character.isWhitespace(code.charAt(i))) {
                         i++;
                         continue;
                     }
-            
+
                     start = i;
                     while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != ')') {
                         i++;
@@ -122,44 +143,43 @@ public class Tokenizador2 {
                     String parametro = code.substring(start, i);
                     tokens.push(parametro);
                 }
-            
+
                 if (i >= n || code.charAt(i) != ')') {
-                    throw new IllegalArgumentException("Error: Parentesis no balanceados ");
+                    throw new IllegalArgumentException("Error: Paréntesis no balanceados");
                 }
                 tokens.push(")");
                 i++;
-            
+
                 while (i < n && Character.isWhitespace(code.charAt(i))) {
                     i++;
                 }
-            
-                
+
                 if (i >= n) {
-                    throw new IllegalArgumentException("Error: El cuerpo de la funcion no puede estar vacio");
+                    throw new IllegalArgumentException("Error: El cuerpo de la función no puede estar vacío");
                 }
-            
+
                 if (code.charAt(i) == '(') {
                     tokens.push("(");
                     i++;
-            
+
                     while (i < n && code.charAt(i) != ')') {
                         if (Character.isWhitespace(code.charAt(i))) {
                             i++;
                             continue;
                         }
-            
+
                         if (code.charAt(i) == '(') {
                             tokens.push("(");
                             i++;
                             continue;
                         }
-            
+
                         if (code.charAt(i) == ')') {
                             tokens.push(")");
                             i++;
                             continue;
                         }
-            
+
                         start = i;
                         while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
                             i++;
@@ -167,14 +187,13 @@ public class Tokenizador2 {
                         String tokenCuerpo = code.substring(start, i);
                         tokens.push(tokenCuerpo);
                     }
-            
+
                     if (i >= n || code.charAt(i) != ')') {
-                        throw new IllegalArgumentException("Error: Parentesis no balanceados en el cuerpo de la funcion");
+                        throw new IllegalArgumentException("Error: Paréntesis no balanceados en el cuerpo de la función");
                     }
                     tokens.push(")");
                     i++;
                 } else {
-                    
                     start = i;
                     while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != ')') {
                         i++;
@@ -182,16 +201,26 @@ public class Tokenizador2 {
                     String cuerpo = code.substring(start, i);
                     tokens.push(cuerpo);
                 }
-            
+
                 continue;
             }*/
             
+            StringBuilder token = new StringBuilder();
             while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
                 token.append(code.charAt(i));
                 i++;
             }
-            tokens.push(token.toString());
-            token.setLength(0);
+
+            /**String tokenStr = token.toString();
+            if (esOperadorValido(tokenStr) || esNumeroValido(tokenStr)) {
+                tokens.push(tokenStr);
+            } else {
+                throw new IllegalArgumentException("Token inválido: " + tokenStr);
+            }*/
+
+            if (token.length() > 0) {
+                tokens.push(token.toString());
+            }
         }
         return tokens;
     }

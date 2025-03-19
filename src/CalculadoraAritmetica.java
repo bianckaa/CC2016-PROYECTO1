@@ -1,38 +1,57 @@
-import java.util.List;
 import java.util.Stack;
 
-public class CalculadoraAritmetica<T> {
+public class CalculadoraAritmetica<T extends Number> {
 
-    public Double calculate(List<T> prefixList) {  
-        Stack<Double> result = new Stack<>();
+    private Tokenizador2 tokenizador;
 
-        if (prefixList.isEmpty()) {
-            throw new IllegalArgumentException("La lista de expresión está vacía");
+    public CalculadoraAritmetica() {
+        this.tokenizador = new Tokenizador2();
+    }
+
+    public Double calcularExpresionLisp(String expresionLisp) {
+        // Tokenizar la expresión Lisp
+        Stack<String> tokens = tokenizador.tokenize(expresionLisp);
+
+        // Validar la expresión usando los métodos del tokenizador
+        if (!tokenizador.esExpresionValida(tokens)) {
+            throw new IllegalArgumentException("La expresión está vacía");
         }
-        
-        T signo = prefixList.get(0); 
 
-        for (int i = 1; i < prefixList.size(); i++) {
-            T elemento = prefixList.get(i);
+        // El primer token debe ser el operador
+        String operador = tokens.pop();
+        if (!tokenizador.esPrimerTokenOperador(tokens)) {
+            throw new IllegalArgumentException("Operador no válido: " + operador);
+        }
 
-            if (elemento instanceof Number) {
-                result.push(((Number) elemento).doubleValue());
+        // Procesar los operandos
+        Stack<Double> operandos = new Stack<>();
+        while (!tokens.isEmpty()) {
+            String token = tokens.pop();
+            if (tokenizador.esNumeroValido(token)) {
+                double operando = Double.parseDouble(token);
+                operandos.push(operando);
+            } else {
+                throw new IllegalArgumentException("Operando inválido: " + token);
             }
         }
 
-        if (signo instanceof String) {
-            String operador = (String) signo;
+        // Realizar la operación
+        return calcular(operador, operandos);
+    }
 
-            switch (operador) {
-                case "+": return sumar(result);
-                case "-": return restar(result);
-                case "*": return multiplicar(result);
-                case "/": return dividir(result);
-                default: throw new IllegalArgumentException("Operador no válido");
-            }
+    private Double calcular(String operador, Stack<Double> operandos) {
+        if (operandos.isEmpty()) {
+            throw new IllegalArgumentException("La lista de operandos está vacía");
         }
 
-        throw new IllegalArgumentException("El primer elemento debe ser un operador");
+        // Realizar la operación
+        switch (operador) {
+            case "+": return sumar(operandos);
+            case "-": return restar(operandos);
+            case "*": return multiplicar(operandos);
+            case "/": return dividir(operandos);
+            default: throw new IllegalArgumentException("Operador no válido: " + operador);
+        }
     }
 
     private double sumar(Stack<Double> values) {
