@@ -12,11 +12,7 @@ public class Tokenizador2{
         while (i < n) {
             char ch = code.charAt(i);
 
-<<<<<<< HEAD
-            if (Character.isWhitespace(ch)) {
-=======
             if (Character.isWhitespace(ch)) {  
->>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
                 i++;
                 continue;
             }
@@ -27,82 +23,17 @@ public class Tokenizador2{
                 continue;
             }
 
-<<<<<<< HEAD
-            if (code.startsWith("quote", i)) {
-                i += 5;
-
-                while (i < n && Character.isWhitespace(code.charAt(i))) {
-                    i++;
-                }
-
-                if (i >= n || code.charAt(i) != '(') {
-                    throw new IllegalArgumentException("Error: quote debe ir seguido de una expresión entre paréntesis");
-                }
-
-                int balance = 1;
-                int start = i;
-                i++;
-
-                while (i < n && balance > 0) {
-                    if (code.charAt(i) == '(') balance++;
-                    if (code.charAt(i) == ')') balance--;
-                    i++;
-                }
-
-                if (balance != 0) {
-                    throw new IllegalArgumentException("Error: Paréntesis no balanceados");
-                }
-
-                String quoteBlock = code.substring(start, i);
-                tokens.push("quote");
-                tokens.push(quoteBlock);
-=======
             // Manejo de Quote
             if (code.toLowerCase().startsWith("quote", i)) {
                 i += 5;
                 i = handleQuote(code, i, tokens);
->>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
                 continue;
             }
 
             if (code.startsWith("'", i)) {
-<<<<<<< HEAD
-                i += 1;
-
-                if (i >= n || code.charAt(i) != '(') {
-                    throw new IllegalArgumentException("Error: debe de ir pegado el apostrofe con un paréntesis");
-                }
-
-                while (i < n && Character.isWhitespace(code.charAt(i))) {
-                    i++;
-                }
-
-                if (i >= n || code.charAt(i) != '(') {
-                    throw new IllegalArgumentException("Error: quote debe ir seguido de una expresión entre paréntesis");
-                }
-
-                int balance = 1;
-                int start = i;
-                i++;
-
-                while (i < n && balance > 0) {
-                    if (code.charAt(i) == '(') balance++;
-                    if (code.charAt(i) == ')') balance--;
-                    i++;
-                }
-
-                if (balance != 0) {
-                    throw new IllegalArgumentException("Error: Paréntesis no balanceados después de quote");
-                }
-
-                String quoteBlock = code.substring(start, i);
-                tokens.push("quote");
-                tokens.push(quoteBlock);
-=======
                 i += 1; 
                 
                 i = handleQuote(code, i, tokens);
->>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
                 continue;
             }
 
@@ -207,11 +138,7 @@ public class Tokenizador2{
 
                 continue;
             }
-<<<<<<< HEAD
-
-=======
             
->>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
             while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
                 token.append(code.charAt(i));
                 i++;
@@ -229,32 +156,6 @@ public class Tokenizador2{
         return tokens;
     }
 
-<<<<<<< HEAD
-
-    public boolean esOperadorValido(String token) {
-        return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/");
-    }
-
-    public boolean esNumeroValido(String token) {
-        try {
-            Double.parseDouble(token);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    public boolean esExpresionValida(Stack<String> tokens) {
-        return !tokens.isEmpty();
-    }
-
-    public boolean esPrimerTokenOperador(Stack<String> tokens) {
-        if (tokens.isEmpty()) {
-            return false;
-        }
-        String primerToken = tokens.peek();
-        return esOperadorValido(primerToken);
-=======
     private int handleQuote(String code, int startIndex, Stack<String> tokens) {
         int i = startIndex;
         int n = code.length();
@@ -301,6 +202,5 @@ public class Tokenizador2{
             tokens.push(token.toString());
         } 
         return i; 
->>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
     }
 }

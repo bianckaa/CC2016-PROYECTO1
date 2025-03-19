@@ -18,7 +18,7 @@ public class MainPre {
             EvaluadorPre evaluador = new EvaluadorPre();
             Object resultado = evaluador.evaluar(tokens);
 
-            System.out.println("Resultado de la evaluación: " + resultado);
+            System.out.println("Resultado de la evaluacion: " + resultado);
         } catch (IllegalArgumentException e) {
             System.err.println("Error de sintaxis: " + e.getMessage());
         } catch (Exception e) {
