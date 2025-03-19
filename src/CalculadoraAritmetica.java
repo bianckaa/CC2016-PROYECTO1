@@ -1,87 +1,55 @@
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class CalculadoraAritmetica<T extends Number> {
+public class CalculadoraAritmetica {
 
-    private Tokenizador2 tokenizador;
+    private final Tokenizador2 tokenizador;
 
     public CalculadoraAritmetica() {
         this.tokenizador = new Tokenizador2();
     }
 
     public Double calcularExpresionLisp(String expresionLisp) {
-        // Tokenizar la expresión Lisp
-        Stack<String> tokens = tokenizador.tokenize(expresionLisp);
+        Queue<String> tokens = new LinkedList<>(tokenizador.tokenize(expresionLisp));
 
-        // Validar la expresión usando los métodos del tokenizador
-        if (!tokenizador.esExpresionValida(tokens)) {
-            throw new IllegalArgumentException("La expresión está vacía");
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Expresión vacía o incompleta.");
         }
 
-        // El primer token debe ser el operador
-        String operador = tokens.pop();
-        if (!tokenizador.esPrimerTokenOperador(tokens)) {
+        return evaluar(tokens);
+    }
+
+    private Double evaluar(Queue<String> tokens) {
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Expresión vacía o incompleta.");
+        }
+
+        String operador = tokens.poll(); // Extraer el operador
+
+        if (!tokenizador.esOperadorValido(operador)) {
             throw new IllegalArgumentException("Operador no válido: " + operador);
         }
 
-        // Procesar los operandos
-        Stack<Double> operandos = new Stack<>();
+        // Leer los operandos en orden correcto
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Faltan operandos en la expresión.");
+        }
+
+        double resultado = Double.parseDouble(tokens.poll()); // Tomar el primer operando
+
         while (!tokens.isEmpty()) {
-            String token = tokens.pop();
-            if (tokenizador.esNumeroValido(token)) {
-                double operando = Double.parseDouble(token);
-                operandos.push(operando);
-            } else {
-                throw new IllegalArgumentException("Operando inválido: " + token);
+            double valor = Double.parseDouble(tokens.poll());
+            switch (operador) {
+                case "+" -> resultado += valor;
+                case "-" -> resultado -= valor;
+                case "*" -> resultado *= valor;
+                case "/" -> {
+                    if (valor == 0) throw new ArithmeticException("División por cero");
+                    resultado /= valor;
+                }
+                case "%" -> resultado %= valor;
+                default -> throw new IllegalArgumentException("Operador desconocido.");
             }
-        }
-
-        // Realizar la operación
-        return calcular(operador, operandos);
-    }
-
-    private Double calcular(String operador, Stack<Double> operandos) {
-        if (operandos.isEmpty()) {
-            throw new IllegalArgumentException("La lista de operandos está vacía");
-        }
-
-        // Realizar la operación
-        switch (operador) {
-            case "+": return sumar(operandos);
-            case "-": return restar(operandos);
-            case "*": return multiplicar(operandos);
-            case "/": return dividir(operandos);
-            default: throw new IllegalArgumentException("Operador no válido: " + operador);
-        }
-    }
-
-    private double sumar(Stack<Double> values) {
-        double resultado = 0.0;
-        while (!values.isEmpty()) {
-            resultado += values.pop();
-        }
-        return resultado;
-    }
-
-    private double restar(Stack<Double> values) {
-        double resultado = values.pop();
-        while (!values.isEmpty()) {
-            resultado -= values.pop();
-        }
-        return resultado;
-    }
-
-    private double multiplicar(Stack<Double> values) {
-        double resultado = 1.0;
-        while (!values.isEmpty()) {
-            resultado *= values.pop();
-        }
-        return resultado;
-    }
-
-    private double dividir(Stack<Double> values) {
-        double resultado = values.pop();
-        while (!values.isEmpty()) {
-            resultado /= values.pop();
         }
         return resultado;
     }
