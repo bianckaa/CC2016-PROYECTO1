@@ -5,7 +5,6 @@ public class Tokenizador2{
         Stack<String> tokens = new Stack<>();
         int i = 0;
         int n = code.length();
-        StringBuilder token = new StringBuilder();
 
         while (i < n) {
             char ch = code.charAt(i);
@@ -182,6 +181,7 @@ public class Tokenizador2{
                 continue;
             }*/
             
+            StringBuilder token = new StringBuilder();
             while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
                 token.append(code.charAt(i));
                 i++;
@@ -194,7 +194,9 @@ public class Tokenizador2{
                 throw new IllegalArgumentException("Token inválido: " + tokenStr);
             }*/
 
-            token.setLength(0); 
+            if (token.length() > 0) {
+                tokens.push(token.toString());
+            }
         }
         return tokens;
     }
