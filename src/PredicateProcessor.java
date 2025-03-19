@@ -1,6 +1,6 @@
 import java.util.Stack;
 
-public class EvaluadorPre {
+public class PredicateProcessor {
 
     private PredicateEvaluator predicateEvaluator = new PredicateEvaluator();
 
@@ -40,8 +40,6 @@ public class EvaluadorPre {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Expresion incompleta.");
         }
-
-       
         String predicado = tokens.pop();
         return evaluarPredicado(predicado, tokens);
     }

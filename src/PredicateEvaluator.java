@@ -1,7 +1,6 @@
 import java.util.Stack;
 
 public class PredicateEvaluator {
-
     public String isAtom(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: ATOM necesita un argumento.");

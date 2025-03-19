@@ -23,7 +23,7 @@ public class Tokenizador2{
             // Manejo de Quote
             if (code.toLowerCase().startsWith("quote", i)) {
                 i += 5;
-                i = handleQuote(code, i, tokens);
+                i = tokenizationQuote(code, i, tokens);
                 continue;
             }
 
@@ -31,11 +31,11 @@ public class Tokenizador2{
             if (code.startsWith("'", i)) {
                 i += 1; 
                 
-                i = handleQuote(code, i, tokens);
+                i = tokenizationQuote(code, i, tokens);
                 continue;
             }
 
-            
+            // Manejo de setq
             if (code.startsWith("setq", i)) {
                 i += 4; 
                 tokens.push("setq"); 
@@ -188,13 +188,6 @@ public class Tokenizador2{
                 i++;
             }
 
-            /**String tokenStr = token.toString();
-            if (esOperadorValido(tokenStr) || esNumeroValido(tokenStr)) {
-                tokens.push(tokenStr);
-            } else {
-                throw new IllegalArgumentException("Token inválido: " + tokenStr);
-            }*/
-
             if (token.length() > 0) {
                 tokens.push(token.toString());
             }
@@ -202,7 +195,7 @@ public class Tokenizador2{
         return tokens;
     }
 
-    private int handleQuote(String code, int startIndex, Stack<String> tokens) {
+    private int tokenizationQuote(String code, int startIndex, Stack<String> tokens) {
         int i = startIndex;
         int n = code.length();
 

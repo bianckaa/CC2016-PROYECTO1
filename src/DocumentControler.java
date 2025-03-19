@@ -33,7 +33,7 @@ public class DocumentControler{
 
     public Object evaluarCodigoLisp() {
         Stack<String> tokens = processLispCode();
-        EvaluadorPre evaluador = new EvaluadorPre();
+        PredicateProcessor evaluador = new PredicateProcessor();
         return evaluador.evaluar(tokens);
     }
 
