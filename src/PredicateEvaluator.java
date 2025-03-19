@@ -2,44 +2,120 @@ import java.util.Stack;
 
 public class PredicateEvaluator {
 
-    public Object isAtom(Stack<String> tokens) {
-        if (tokens.isEmpty()) throw new IllegalArgumentException("Faltan argumentos en ATOM");
+    public String isAtom(Stack<String> tokens) {
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Error: ATOM necesita un argumento.");
+        }
+
         String expresion = tokens.pop();
-        return (expresion.startsWith("(") && expresion.endsWith(")")) ? "NIL" : "T";
+
+        
+        if (expresion.startsWith("(")) {
+            return "nil";
+        }
+
+        
+        if (expresion.equals("'")) {
+            expresion = tokens.pop();
+        }
+
+        
+        if (expresion.startsWith("(")) {
+            return "nil";
+        }
+
+        
+        return "T";
     }
 
-    public Object isList(Stack<String> tokens) {
-        if (tokens.isEmpty()) throw new IllegalArgumentException("Faltan argumentos en LISTP");
+    public String isList(Stack<String> tokens) {
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Error: LIST necesita un argumento.");
+        }
+
         String expresion = tokens.pop();
-        return (expresion.startsWith("(") && expresion.endsWith(")")) ? "T" : "NIL";
+
+        
+        if (expresion.equals("'")) {
+            expresion = tokens.pop();
+        }
+
+        
+        return expresion.startsWith("(") ? "T" : "nil";
     }
 
-    public Object isEqual(Stack<String> tokens) {
-        if (tokens.size() < 2) throw new IllegalArgumentException("Faltan argumentos en EQUAL");
-        String expresion1 = tokens.pop();
+    public String isEqual(Stack<String> tokens) {
+        if (tokens.size() < 2) {
+            throw new IllegalArgumentException("Error: EQUAL necesita dos argumentos.");
+        }
+
+        
         String expresion2 = tokens.pop();
-        return expresion1.equals(expresion2) ? "T" : "NIL";
+        String expresion1 = tokens.pop();
+
+        
+        if (expresion1.equals("'")) {
+            expresion1 = tokens.pop();
+        }
+        if (expresion2.equals("'")) {
+            expresion2 = tokens.pop();
+        }
+
+        
+        return expresion1.equals(expresion2) ? "T" : "nil";
     }
 
-    public Object isLessThan(Stack<String> tokens) {
-        if (tokens.size() < 2) throw new IllegalArgumentException("Faltan argumentos en <");
+    public String isLessThan(Stack<String> tokens) {
+        if (tokens.size() < 2) {
+            throw new IllegalArgumentException("Error: < necesita dos argumentos.");
+        }
+
+        
+        String expresion2 = tokens.pop();
+        String expresion1 = tokens.pop();
+
+
+        if (expresion1.equals("'")) {
+            expresion1 = tokens.pop();
+        }
+        if (expresion2.equals("'")) {
+            expresion2 = tokens.pop();
+        }
+
         try {
-            double num1 = Double.parseDouble(tokens.pop());
-            double num2 = Double.parseDouble(tokens.pop());
-            return num1 < num2 ? "T" : "NIL";
+            double num1 = Double.parseDouble(expresion1);
+            double num2 = Double.parseDouble(expresion2);
+            
+            return num1 > num2 ? "T" : "nil";
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Los argumentos de < deben ser numeros");
+            throw new IllegalArgumentException("Error: < solo acepta valores numéricos.");
         }
     }
 
-    public Object isGreaterThan(Stack<String> tokens) {
-        if (tokens.size() < 2) throw new IllegalArgumentException("Faltan argumentos en >");
+    public String isGreaterThan(Stack<String> tokens) {
+        if (tokens.size() < 2) {
+            throw new IllegalArgumentException("Error: > necesita dos argumentos.");
+        }
+
+        
+        String expresion2 = tokens.pop();
+        String expresion1 = tokens.pop();
+
+        
+        if (expresion1.equals("'")) {
+            expresion1 = tokens.pop();
+        }
+        if (expresion2.equals("'")) {
+            expresion2 = tokens.pop();
+        }
+
         try {
-            double num1 = Double.parseDouble(tokens.pop());
-            double num2 = Double.parseDouble(tokens.pop());
-            return num1 > num2 ? "T" : "NIL";
+            double num1 = Double.parseDouble(expresion1);
+            double num2 = Double.parseDouble(expresion2);
+            
+            return num1 < num2 ? "T" : "nil";
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Los argumentos de > deben ser numeros");
+            throw new IllegalArgumentException("Error: > solo acepta valores numéricos.");
         }
     }
 }

@@ -1,17 +1,10 @@
 import java.util.Stack;
-///Tokenizador descartado
 
-<<<<<<<<<< Temporary merge branch 1:Tokenizador(Unsed).java
 public class Tokenizador2{
-
-==========
-public class Tokenizador2 {
->>>>>>>>>> Temporary merge branch 2:src/Tokenizador2.java
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
         int i = 0;
         int n = code.length();
-        StringBuilder token = new StringBuilder();
 
         while (i < n) {
             char ch = code.charAt(i);
@@ -34,44 +27,79 @@ public class Tokenizador2 {
                 continue;
             }
 
+            // Manejo de '
             if (code.startsWith("'", i)) {
-<<<<<<< HEAD
                 i += 1;
 
-                if (i >= n || code.charAt(i) != '(') {
-                    throw new IllegalArgumentException("Error: debe de ir pegado el apostrofe con un paréntesis");
-                }
-
-                while (i < n && Character.isWhitespace(code.charAt(i))) {
-                    i++;
-                }
-
-                if (i >= n || code.charAt(i) != '(') {
-                    throw new IllegalArgumentException("Error: quote debe ir seguido de una expresión entre paréntesis");
-                }
-
-                int balance = 1;
-                int start = i;
-                i++;
-
-                while (i < n && balance > 0) {
-                    if (code.charAt(i) == '(') balance++;
-                    if (code.charAt(i) == ')') balance--;
-                    i++;
-                }
-
-                if (balance != 0) {
-                    throw new IllegalArgumentException("Error: Paréntesis no balanceados después de quote");
-                }
-
-                String quoteBlock = code.substring(start, i);
-                tokens.push("quote");
-                tokens.push(quoteBlock);
-=======
-                i += 1; 
                 
-                i = handleQuote(code, i, tokens);
->>>>>>> f1cf34b5b5f227bb02dbffea999cf397a07b3044
+                int nextTokenStart = i;
+                while (nextTokenStart < n && Character.isWhitespace(code.charAt(nextTokenStart))) {
+                    nextTokenStart++;
+                }
+
+                
+                StringBuilder nextToken = new StringBuilder();
+                while (nextTokenStart < n && !Character.isWhitespace(code.charAt(nextTokenStart)) && 
+                       code.charAt(nextTokenStart) != '(' && code.charAt(nextTokenStart) != ')') {
+                    nextToken.append(code.charAt(nextTokenStart));
+                    nextTokenStart++;
+                }
+
+                
+                if (nextToken.toString().equals("ATOM") || nextToken.toString().equals("LIST") || 
+                    nextToken.toString().equals("EQUAL") || nextToken.toString().equals("<") || 
+                    nextToken.toString().equals(">")) {
+                    tokens.push("'"); 
+                    i = nextTokenStart; 
+                } else {
+                    
+                    i = handleQuote(code, i, tokens);
+                }
+                continue;
+            }
+
+            
+            if (code.startsWith("setq", i)) {
+                i += 4; 
+                tokens.push("setq"); 
+
+                i = code.indexOf(" ", i); 
+                if (i != -1) {
+                    i++; 
+                    int startIdx = i; 
+
+                    while (i < code.length() && Character.isLetterOrDigit(code.charAt(i))) {
+                        i++;
+                    }
+                    String varName = code.substring(startIdx, i).trim(); 
+
+                    i = code.indexOf(" ", i); 
+                    if (i != -1) {
+                        i++;
+                        startIdx = i;
+
+                        if (code.charAt(i) == '"') {
+                            i++; 
+                            startIdx = i;
+
+                            while (i < code.length() && code.charAt(i) != '"') {
+                                i++;
+                            }
+                            String value = code.substring(startIdx, i); 
+                            tokens.push(varName);
+                            tokens.push(value);
+                            i++; 
+                        } else {
+                            
+                            while (i < code.length() && (Character.isDigit(code.charAt(i)) || code.charAt(i) == '.')) {
+                                i++; 
+                            }
+                            String value = code.substring(startIdx, i).trim(); 
+                            tokens.push(varName);
+                            tokens.push(value); 
+                        }
+                    }
+                }
                 continue;
             }
 
@@ -175,11 +203,9 @@ public class Tokenizador2 {
                 }
 
                 continue;
-            }
-<<<<<<< HEAD
-
-=======
+            }*/
             
+            StringBuilder token = new StringBuilder();
             while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
                 token.append(code.charAt(i));
                 i++;
@@ -192,7 +218,9 @@ public class Tokenizador2 {
                 throw new IllegalArgumentException("Token inválido: " + tokenStr);
             }*/
 
-            token.setLength(0); 
+            if (token.length() > 0) {
+                tokens.push(token.toString());
+            }
         }
         return tokens;
     }
