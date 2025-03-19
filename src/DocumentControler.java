@@ -16,7 +16,6 @@ public class DocumentControler{
             String line;
             while ((line = reader.readLine())!= null) {
                 content.append(line).append(" \n ");
-
             }
         } catch (IOException e) {
             throw new RuntimeException("Error al leer el archivo: " + e.getMessage());
@@ -30,7 +29,4 @@ public class DocumentControler{
         Tokenizador2 tokenizer = new Tokenizador2(); 
         return tokenizer.tokenize(code); 
     }
-
-   
-
 }

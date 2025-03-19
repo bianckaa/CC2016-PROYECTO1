@@ -189,13 +189,6 @@ public class Tokenizador2{
                 i++;
             }
 
-            /**String tokenStr = token.toString();
-            if (esOperadorValido(tokenStr) || esNumeroValido(tokenStr)) {
-                tokens.push(tokenStr);
-            } else {
-                throw new IllegalArgumentException("Token inválido: " + tokenStr);
-            }*/
-
             if (token.length() > 0) {
                 tokens.push(token.toString());
             }
