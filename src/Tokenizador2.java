@@ -1,12 +1,8 @@
 import java.util.Stack;
 ///Tokenizador descartado
 
-<<<<<<< HEAD:src(unused)/Tokenizador2.java
 public class Tokenizador2{
 
-=======
-public class Tokenizador2 {
->>>>>>> 9ee87a67e056d5de45b268f7157f5b195dcd2af9:src/Tokenizador2.java
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
         int i = 0;
