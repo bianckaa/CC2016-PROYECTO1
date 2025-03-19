@@ -35,7 +35,52 @@ public class Tokenizador2 {
                 continue;
             }
 
-            // Manejo de Defun
+            // Manejo de Setq
+            if (code.startsWith("setq", i)) {
+                i += 4; 
+                tokens.push("setq"); 
+
+                i = code.indexOf(" ", i); 
+                if (i != -1) {
+                    i++; 
+                    int startIdx = i; 
+
+                    while (i < code.length() && Character.isLetterOrDigit(code.charAt(i))) {
+                        i++;
+                    }
+                    String varName = code.substring(startIdx, i).trim(); 
+
+                    i = code.indexOf(" ", i); 
+                    if (i != -1) {
+                        i++;
+                        startIdx = i;
+
+                        if (code.charAt(i) == '"') {
+                            i++; 
+                            startIdx = i;
+
+                            while (i < code.length() && code.charAt(i) != '"') {
+                                i++;
+                            }
+                            String value = code.substring(startIdx, i); 
+                            tokens.push(varName);
+                            tokens.push(value);
+                            i++; 
+                        } else {
+                            
+                            while (i < code.length() && (Character.isDigit(code.charAt(i)) || code.charAt(i) == '.')) {
+                                i++; 
+                            }
+                            String value = code.substring(startIdx, i).trim(); 
+                            tokens.push(varName);
+                            tokens.push(value); 
+                        }
+                    }
+                }
+                continue;
+            }
+
+            /*// Manejo de Defun
             if (code.startsWith("defun", i)) {
                 i += 5;
 
@@ -135,19 +180,19 @@ public class Tokenizador2 {
                 }
 
                 continue;
-            }
+            }*/
             
             while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
                 token.append(code.charAt(i));
                 i++;
             }
 
-            String tokenStr = token.toString();
+            /**String tokenStr = token.toString();
             if (esOperadorValido(tokenStr) || esNumeroValido(tokenStr)) {
                 tokens.push(tokenStr);
             } else {
                 throw new IllegalArgumentException("Token inválido: " + tokenStr);
-            }
+            }*/
 
             token.setLength(0); 
         }
@@ -178,7 +223,6 @@ public class Tokenizador2 {
                 throw new IllegalArgumentException("Error: Paréntesis no balanceados después de quote");
             }
     
-            
             String quoteBlock = code.substring(start, i);
             tokens.push("quote");
             tokens.push(quoteBlock);
