@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainPre",
+            "request": "launch",
+            "mainClass": "MainPre",
+            "projectName": "CC2016-PROYECTO1_3862303b"
+        },
+        {
+            "type": "java",
             "name": "MainQuote",
             "request": "launch",
             "mainClass": "MainQuote",
