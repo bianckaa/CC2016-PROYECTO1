@@ -1,3 +1,7 @@
 (cond
-  ((> 5 3) 'mayor)
-)
+  ((> 10 20) 'mayor)
+  ((< 10 5) 'menor)
+  (t 'ninguno))
+
+
+

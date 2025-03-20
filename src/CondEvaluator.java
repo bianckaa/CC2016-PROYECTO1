@@ -7,9 +7,9 @@ public class CondEvaluator {
 
     public CondEvaluator(VariableManagement<Object> variableManager) {
         this.predicateEvaluator = new PredicateEvaluator(variableManager);
-    }    
+    }
 
-    public String evaluarCond(Stack<String> tokens) {
+    public String evaluarCOND(Stack<String> tokens) {
         imprimirListaTokens(tokens);
 
         while (!tokens.isEmpty()) {
@@ -27,10 +27,9 @@ public class CondEvaluator {
                 String resultadoCondicion = evaluarCondicion(condicion, tokens);
                 System.out.println("Resultado de la condición: " + resultadoCondicion);
 
-                if (resultadoCondicion.equals("T")) {
-                    String accion = tokens.get(tokens.size() - 2);
+                if (resultadoCondicion.equals("T") || !resultadoCondicion.equals("F") && !resultadoCondicion.equals("nil")) {
+                    String accion = extraerAccion(tokens);
                     System.out.println("Acción extraída: " + accion);
-                    tokens.remove(tokens.size() - 2);  
                     return accion;
                 } else {
                     descartarExpresion(tokens);
@@ -51,18 +50,71 @@ public class CondEvaluator {
     private String evaluarCondicion(String condicion, Stack<String> tokens) {
         Stack<String> condicionTokens = new Stack<>();
         String[] partes = condicion.split(" ");
-
+    
         for (String parte : partes) {
             condicionTokens.push(parte);
         }
-
-        String predicado = condicionTokens.get(condicionTokens.size() - 4);  
+    
+        String predicado = condicionTokens.get(1);  
         System.out.println("Predicado a evaluar: " + predicado);
+    
+        condicionTokens.remove(0);  
+        condicionTokens.remove(0);  
+    
+        while (!condicionTokens.isEmpty() && condicionTokens.peek().equals(")")) {
+            condicionTokens.pop();
+        }
+    
+        System.out.println("Tokens para el predicado: " + condicionTokens);
+    
+        Stack<String> condicionTokensInvertidos = new Stack<>();
+        while (!condicionTokens.isEmpty()) {
+            condicionTokensInvertidos.push(condicionTokens.pop());
+        }
+    
+        System.out.println("Tokens invertidos: " + condicionTokensInvertidos);
+    
+        for (int i = 0; i < condicionTokensInvertidos.size(); i++) {
+            try {
+                String token = condicionTokensInvertidos.get(i);
+                if (isNumeric(token)) {
+                    condicionTokensInvertidos.set(i, String.valueOf(Double.parseDouble(token)));
+                }
+            } catch (Exception e) {
+                System.out.println("Error al convertir el parámetro: " + condicionTokensInvertidos.get(i));
+            }
+        }
+    
+        Object resultado = predicateEvaluator.evaluarPredicado(predicado, condicionTokensInvertidos);
+        System.out.println("Resultado del predicado: " + resultado);
+    
+        if (resultado == null || resultado.equals(false) || (resultado instanceof String && ((String) resultado).equalsIgnoreCase("NIL"))) {
+            System.out.println("Condición no cumplida, ignorando la acción.");
+    
+            while (!tokens.isEmpty()) {
+                String token = tokens.pop();
+                if (token.equals(")")) {
+                    break;
+                }
+            }
+    
+            if (tokens.isEmpty() || !tokens.contains("(")) {
+                return "NIL";
+            }
+    
+            return "Acción ignorada";
+        }
+    
+        return "Acción ejecutada";
+    }
 
-        condicionTokens.remove(condicionTokens.size() - 3);  
-
-        Object resultado = predicateEvaluator.evaluarPredicado(predicado, condicionTokens);
-        return resultado.toString();
+    private boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     private String extraerExpresion(Stack<String> tokens) {
@@ -111,5 +163,18 @@ public class CondEvaluator {
                 break;
             }
         }
+    }
+
+    private String extraerAccion(Stack<String> tokens) {
+        if (tokens.isEmpty()) {
+            return "nil";
+        }
+
+        String token = tokens.pop();
+        
+        if (token.equals("quote") && !tokens.isEmpty()) {
+            return tokens.pop();
+        }  
+        return token;
     }
 }

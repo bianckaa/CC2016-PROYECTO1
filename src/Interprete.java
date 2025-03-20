@@ -65,7 +65,7 @@ public class Interprete {
                 }
 
                 else if (token.equalsIgnoreCase("cond")) {
-                    String resultado = condEvaluator.evaluarCond(orderedTokens);
+                    String resultado = condEvaluator.evaluarCOND(orderedTokens);
                     System.out.println("Resultado de COND: " + resultado);
                 }
 
@@ -81,16 +81,10 @@ public class Interprete {
                         }
                         String valor = orderedTokens.pop();
                         variableManager.setVariable(parametro, valor);
-                    }
-                
-                   
+                    }                        
                     double resultado = DefunEvaluator.evaluarExpresionAritmetica(cuerpo, variableManager);
                     System.out.println("Resultado de la función " + token + ": " + resultado);
                 }
-
-                
-
-                // Otras implementaciones (Defun, COND, etc.)
             }
         } catch (IllegalArgumentException e) {
             System.err.println("Error de sintaxis: " + e.getMessage());
