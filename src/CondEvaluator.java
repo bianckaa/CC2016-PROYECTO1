@@ -1,28 +1,102 @@
 import java.util.Stack;
 
 public class CondEvaluator {
-    public static String evaluarCondicion(Stack<String> tokens, VariableManagement<String> variableManager) {
-        String operador = tokens.pop();
-        String operando1 = tokens.pop();
-        String operando2 = tokens.pop();
-        String resultadoTrue = tokens.pop();
-        String resultadoFalse = tokens.pop();
+    private PredicateEvaluator predicateEvaluator;
 
-        if (operador.equals(">")) {
-            String valor1 = variableManager.getVariable(operando1);
-            String valor2 = variableManager.getVariable(operando2);
+    public CondEvaluator() {
+        this.predicateEvaluator = new PredicateEvaluator();
+    }
 
-            if (valor1 != null && valor2 != null) {
-                Integer intValor1 = Integer.parseInt(valor1);
-                Integer intValor2 = Integer.parseInt(valor2);
-                if (intValor1 > intValor2) {
-                    return resultadoTrue;
+    public String evaluarCond(Stack<String> tokens) {
+        while (!tokens.isEmpty()) {
+            String token = tokens.pop();
+            System.out.println("Token actual en CondEvaluator: " + token); 
+
+            if (token.trim().isEmpty()) {
+                continue;
+            }
+
+            if (token.equals("(")) {
+                String condicion = extraerExpresion(tokens);
+                System.out.println("Condición extraída: " + condicion); 
+
+                String resultadoCondicion = evaluarCondicion(condicion, tokens);
+                System.out.println("Resultado de la condición: " + resultadoCondicion); 
+
+                if (resultadoCondicion.equals("T")) {
+                    String accion = extraerExpresion(tokens);
+                    System.out.println("Acción extraída: " + accion); 
+                    return accion;
                 } else {
-                    return resultadoFalse;
+                    descartarExpresion(tokens);
+                    System.out.println("Condición falsa, descartando acción..."); 
                 }
+            } else if (token.equals(")")) {               
+                break;
+            }
+        }
+        return "esta vacio"; 
+    }
+
+    private String evaluarCondicion(String condicion, Stack<String> tokens) {
+        Stack<String> condicionTokens = new Stack<>();
+        String[] partes = condicion.split(" ");
+        for (int i = partes.length - 1; i >= 0; i--) {
+            condicionTokens.push(partes[i]);
+        }
+
+        String predicado = condicionTokens.pop();
+        System.out.println("Predicado a evaluar: " + predicado); 
+
+        Object resultado = predicateEvaluator.evaluarPredicado(predicado, condicionTokens);
+        return resultado.toString();
+    }
+
+    private String extraerExpresion(Stack<String> tokens) {
+        StringBuilder expresion = new StringBuilder();
+        int balance = 0;
+
+        while (!tokens.isEmpty()) {
+            String token = tokens.pop();
+
+            if (token.equals("(")) {
+                balance++;
+            } else if (token.equals(")")) {
+                balance--;
+                if (balance < 0) {
+                    tokens.push(token); 
+                    break;
+                }
+            }
+
+            expresion.insert(0, token + " "); 
+
+            if (balance == 0) {
+                break;
             }
         }
 
-        return null; 
+        return expresion.toString().trim();
+    }
+
+    private void descartarExpresion(Stack<String> tokens) {
+        int balance = 0;
+
+        while (!tokens.isEmpty()) {
+            String token = tokens.pop();
+
+            if (token.equals("(")) {
+                balance++;
+            } else if (token.equals(")")) {
+                balance--;
+                if (balance < 0) {
+                    break;
+                }
+            }
+
+            if (balance == 0) {
+                break;
+            }
+        }
     }
 }

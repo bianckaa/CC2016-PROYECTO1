@@ -4,18 +4,20 @@ public class Interprete {
     private DocumentControler controller;
     private VariableManagement<Object> variableManager;
     private PredicateEvaluator predicateEvaluator;
+    private CondEvaluator condEvaluator;
 
     public Interprete(String filePath) {
         controller = new DocumentControler(filePath);
         variableManager = new VariableManagement<>();
         predicateEvaluator = new PredicateEvaluator();
+        this.condEvaluator = new CondEvaluator();
     }
 
     public void interpretar() {
         try {
             Stack<String> tokens = controller.processLispCode();
             Stack<String> orderedTokens = new Stack<>();
-
+            
             while (!tokens.isEmpty()) {
                 orderedTokens.push(tokens.pop());
             }
@@ -24,7 +26,7 @@ public class Interprete {
                 String token = orderedTokens.pop();
                 System.out.println("Token: " + token);
 
-                if (token.equals("'") || token.equals("quote")) {
+                if (token.equals("'") || token.equalsIgnoreCase("quote")) {
                     try {
                         if (!orderedTokens.isEmpty()) {
                             String previousToken = orderedTokens.pop();
@@ -36,7 +38,7 @@ public class Interprete {
                     }
                 }
 
-                else if (token.equals("setq")) {
+                else if (token.equalsIgnoreCase("setq")) {
                     try {
                         SetqEvaluator.evaluateSetq(orderedTokens, variableManager);
                     } catch (IllegalArgumentException e) {
@@ -53,6 +55,11 @@ public class Interprete {
                     }
                 }
 
+                else if (token.equalsIgnoreCase("cond")) {
+                    String resultado = condEvaluator.evaluarCond(orderedTokens);
+                    System.out.println("Resultado de COND: " + resultado);
+                }
+
                 // Otras implementaciones (Defun, COND, etc.)
             }
         } catch (IllegalArgumentException e) {
@@ -64,6 +71,6 @@ public class Interprete {
 
     private boolean esPredicado(String token) {
         return token.equals("ATOM") || token.equals("LIST") || token.equals("EQUAL") || 
-               token.equals("<") || token.equals(">");
+            token.equals("<") || token.equals(">");
     }
 }

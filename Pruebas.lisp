@@ -1,9 +1,7 @@
 ; Documento para hacer pruebas en LISP
-(print ' (a b c))
-(print ' z)
-(print ' (c))
-(print (QUOTE (ESTA ES UNA PRUEBA)))
-(print (QUOTE ((ESTA)(ES UNA) PRUEBA)))
-(print (QUOTE HOLA))
-(print (QUOTE (HOLA)))
-(print (QUOTE (())))
+
+(print (COND 
+  ((ATOM 'A) 'EsAtom) 
+  ((LIST '(1 2 3)) 'EsLista) 
+  ((> 5 3) 'Mayor) 
+  ((EQUAL 4 4) 'Igual)))
