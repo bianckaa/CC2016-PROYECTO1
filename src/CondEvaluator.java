@@ -24,13 +24,23 @@ public class CondEvaluator {
                 String condicion = extraerExpresion(tokens);
                 System.out.println("Condición extraída: " + condicion);
 
+                
+                if (condicion.trim().equalsIgnoreCase("t")) {
+                    String accion = extraerAccion(tokens);
+                    System.out.println("Caso por defecto, acción extraída: " + accion);
+                    return accion; 
+                }
+
                 String resultadoCondicion = evaluarCondicion(condicion, tokens);
                 System.out.println("Resultado de la condición: " + resultadoCondicion);
 
-                if (resultadoCondicion.equals("T") || !resultadoCondicion.equals("F") && !resultadoCondicion.equals("nil")) {
+                if (resultadoCondicion.equals("T")) {
                     String accion = extraerAccion(tokens);
                     System.out.println("Acción extraída: " + accion);
-                    return accion;
+
+                    
+                    eliminarTokensHastaApertura(tokens);
+                    return accion; 
                 } else {
                     descartarExpresion(tokens);
                     System.out.println("Condición falsa, descartando acción...");
@@ -39,7 +49,22 @@ public class CondEvaluator {
                 break;
             }
         }
-        return "esta vacio";
+        return "nil";
+    }
+
+    private void eliminarTokensHastaApertura(Stack<String> tokens) {
+        int balance = 1; 
+        while (!tokens.isEmpty()) {
+            String token = tokens.pop();
+            if (token.equals("(")) {
+                balance--;
+                if (balance == 0) {
+                    break; 
+                }
+            } else if (token.equals(")")) {
+                balance++;
+            }
+        }
     }
 
     private void imprimirListaTokens(Stack<String> tokens) {
@@ -90,22 +115,10 @@ public class CondEvaluator {
     
         if (resultado == null || resultado.equals(false) || (resultado instanceof String && ((String) resultado).equalsIgnoreCase("NIL"))) {
             System.out.println("Condición no cumplida, ignorando la acción.");
-    
-            while (!tokens.isEmpty()) {
-                String token = tokens.pop();
-                if (token.equals(")")) {
-                    break;
-                }
-            }
-    
-            if (tokens.isEmpty() || !tokens.contains("(")) {
-                return "NIL";
-            }
-    
-            return "Acción ignorada";
+            return "NIL"; 
         }
     
-        return "Acción ejecutada";
+        return "T"; 
     }
 
     private boolean isNumeric(String str) {

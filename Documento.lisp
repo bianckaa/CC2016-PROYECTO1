@@ -1,7 +1,4 @@
 (cond
-  ((> 10 20) 'mayor)
-  ((< 10 5) 'menor)
-  (t 'ninguno))
-
-
-
+    ((EQUAL 0 0) ' 1)
+    (t ' SISECUMPLIOOOOOOOOO)
+    )

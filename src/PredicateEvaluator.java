@@ -9,6 +9,8 @@ public class PredicateEvaluator {
     }
 
     public Object evaluarPredicado(String predicado, Stack<String> tokens) {
+        predicado = predicado.toUpperCase();
+        
         switch (predicado) {
             case "ATOM":
                 return isAtom(tokens);
