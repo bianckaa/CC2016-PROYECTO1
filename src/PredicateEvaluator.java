@@ -1,6 +1,12 @@
 import java.util.Stack;
 
 public class PredicateEvaluator {
+    private VariableManagement<Object> variableManager;
+
+
+    public PredicateEvaluator(VariableManagement<Object> variableManager) {
+        this.variableManager = variableManager;
+    }
 
     public Object evaluarPredicado(String predicado, Stack<String> tokens) {
         switch (predicado) {
@@ -60,8 +66,8 @@ public class PredicateEvaluator {
             throw new IllegalArgumentException("Error: EQUAL necesita dos argumentos.");
         }
 
-        String expresion2 = tokens.pop();
-        String expresion1 = tokens.pop();
+        String expresion2 = obtenerValor(tokens.pop());
+        String expresion1 = obtenerValor(tokens.pop());
 
         if (expresion1.equals("'")) {
             expresion1 = tokens.pop();
@@ -78,8 +84,8 @@ public class PredicateEvaluator {
             throw new IllegalArgumentException("Error: < necesita dos argumentos.");
         }
 
-        String expresion2 = tokens.pop();
-        String expresion1 = tokens.pop();
+        String expresion2 = obtenerValor(tokens.pop());
+        String expresion1 = obtenerValor(tokens.pop());
 
         if (expresion1.equals("'")) {
             expresion1 = tokens.pop();
@@ -91,7 +97,7 @@ public class PredicateEvaluator {
         try {
             double num1 = Double.parseDouble(expresion1);
             double num2 = Double.parseDouble(expresion2);
-            return num1 > num2 ? "T" : "nil";
+            return num2 < num1 ? "T" : "nil";
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Error: < solo acepta valores numericos.");
         }
@@ -102,8 +108,8 @@ public class PredicateEvaluator {
             throw new IllegalArgumentException("Error: > necesita dos argumentos.");
         }
 
-        String expresion2 = tokens.pop();
-        String expresion1 = tokens.pop();
+        String expresion2 = obtenerValor(tokens.pop());
+        String expresion1 = obtenerValor(tokens.pop());
 
         if (expresion1.equals("'")) {
             expresion1 = tokens.pop();
@@ -115,9 +121,21 @@ public class PredicateEvaluator {
         try {
             double num1 = Double.parseDouble(expresion1);
             double num2 = Double.parseDouble(expresion2);
-            return num1 < num2 ? "T" : "nil";
+            return num2 > num1 ? "T" : "nil";
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Error: > solo acepta valores numericos.");
         }
+        
     }
+    private String obtenerValor(String token) {
+       
+        Object valorVariable = variableManager.getVariable(token);
+        if (valorVariable != null) {
+            return valorVariable.toString(); 
+        }
+
+        
+        return token;
+    }
+
 }

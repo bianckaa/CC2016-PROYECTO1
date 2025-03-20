@@ -1,0 +1,7 @@
+(setq a 20)
+(setq b 10)
+(> a b)  
+(< a b)
+(EQUAL a b) 
+(EQUAL a a)  
+(EQUAL b b)  
