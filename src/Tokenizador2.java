@@ -1,13 +1,10 @@
 import java.util.Stack;
-///Tokenizador descartado
 
 public class Tokenizador2{
-
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
         int i = 0;
         int n = code.length();
-        StringBuilder token = new StringBuilder();
 
         while (i < n) {
             char ch = code.charAt(i);
@@ -26,18 +23,19 @@ public class Tokenizador2{
             // Manejo de Quote
             if (code.toLowerCase().startsWith("quote", i)) {
                 i += 5;
-                i = handleQuote(code, i, tokens);
+                i = tokenizationQuote(code, i, tokens);
                 continue;
             }
 
+            // Manejo de '
             if (code.startsWith("'", i)) {
                 i += 1; 
                 
-                i = handleQuote(code, i, tokens);
+                i = tokenizationQuote(code, i, tokens);
                 continue;
             }
 
-            // Manejo de Setq
+            // Manejo de setq
             if (code.startsWith("setq", i)) {
                 i += 4; 
                 tokens.push("setq"); 
@@ -81,6 +79,8 @@ public class Tokenizador2{
                 }
                 continue;
             }
+
+            
 
             /*// Manejo de Defun
             if (code.startsWith("defun", i)) {
@@ -184,6 +184,7 @@ public class Tokenizador2{
                 continue;
             }*/
             
+            StringBuilder token = new StringBuilder();
             while (i < n && !Character.isWhitespace(code.charAt(i)) && code.charAt(i) != '(' && code.charAt(i) != ')') {
                 token.append(code.charAt(i));
                 i++;
@@ -196,12 +197,14 @@ public class Tokenizador2{
                 throw new IllegalArgumentException("Token inválido: " + tokenStr);
             }*/
 
-            token.setLength(0); 
+            if (token.length() > 0) {
+                tokens.push(token.toString());
+            }
         }
         return tokens;
     }
 
-    private int handleQuote(String code, int startIndex, Stack<String> tokens) {
+    private int tokenizationQuote(String code, int startIndex, Stack<String> tokens) {
         int i = startIndex;
         int n = code.length();
 

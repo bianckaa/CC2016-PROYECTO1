@@ -1,4 +1,3 @@
-(cond
-  ((> x 0) "positivo")
-  ((< x 0) "negativo")
-  (t "cero"))
+(> 3 2)   
+(> 2 3)  
+(> 5 5)   

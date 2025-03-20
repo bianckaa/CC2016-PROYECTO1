@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,5 +30,7 @@ public class DocumentControler{
         Tokenizador2 tokenizer = new Tokenizador2(); 
         return tokenizer.tokenize(code); 
     }
+
+   
 
 }
