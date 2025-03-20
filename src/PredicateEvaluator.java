@@ -25,7 +25,7 @@ public class PredicateEvaluator {
         }
     }
 
-    private String isAtom(Stack<String> tokens) {
+    public String isAtom(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: ATOM necesita un argumento.");
         }
@@ -47,7 +47,7 @@ public class PredicateEvaluator {
         return "T";
     }
 
-    private String isList(Stack<String> tokens) {
+    public String isList(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: LIST necesita un argumento.");
         }
@@ -61,7 +61,7 @@ public class PredicateEvaluator {
         return expresion.startsWith("(") ? "T" : "nil";
     }
 
-    private String isEqual(Stack<String> tokens) {
+    public String isEqual(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: EQUAL necesita dos argumentos.");
         }
@@ -79,7 +79,7 @@ public class PredicateEvaluator {
         return expresion1.equals(expresion2) ? "T" : "nil";
     }
 
-    private String isLessThan(Stack<String> tokens) {
+    public String isLessThan(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: < necesita dos argumentos.");
         }
@@ -103,7 +103,7 @@ public class PredicateEvaluator {
         }
     }
 
-    private String isGreaterThan(Stack<String> tokens) {
+    public String isGreaterThan(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: > necesita dos argumentos.");
         }
@@ -127,7 +127,7 @@ public class PredicateEvaluator {
         }
         
     }
-    private String obtenerValor(String token) {
+    public String obtenerValor(String token) {
        
         Object valorVariable = variableManager.getVariable(token);
         if (valorVariable != null) {
