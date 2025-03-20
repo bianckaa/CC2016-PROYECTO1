@@ -10,13 +10,17 @@ public class SetqEvaluator {
     }
 
     public void evaluateSetq(Stack<String> tokens) {
-        if (tokens.size() < 2) {
+        if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: setq necesita al menos dos parámetros (variable y valor)");
         }
 
         String variable = tokens.pop();
-        String valor = tokens.pop();
 
+        if (tokens.isEmpty()) {
+            throw new IllegalArgumentException("Error: setq necesita un valor para asignar a " + variable);
+        }
+
+        String valor = tokens.pop();
         System.out.println("Procesando setq: " + variable + " = " + valor);
 
         if (esNumeroValido(valor)) {
@@ -27,29 +31,28 @@ public class SetqEvaluator {
             String expresionMatematica = extraerExpresion(tokens, valor);
             expresionMatematica = limpiarParentesis(expresionMatematica);
             System.out.println("Evaluando expresión matemática: " + expresionMatematica);
-
+            
+            // Convertimos la expresión en una pila de tokens para evaluar correctamente
             Stack<String> expresionTokens = new Tokenizador2().tokenize(expresionMatematica);
             Stack<String> expresionRevertida = new Stack<>();
-
+            
             while (!expresionTokens.isEmpty()) {
                 expresionRevertida.push(expresionTokens.pop());
             }
-
+            
             Double resultado = calculadora.evaluar(expresionRevertida);
-
+            
             variableManagement.setVariable(variable, resultado);
             System.out.println("Asignado después de evaluar: " + variable + " = " + resultado);
         } else {
- 
-            variableManagement.setVariable(variable, valor);
-            System.out.println("Asignado directamente: " + variable + " = " + valor);
+            throw new IllegalArgumentException("Error: setq solo puede asignar números o expresiones matemáticas");
         }
     }
 
     private String extraerExpresion(Stack<String> tokens, String inicio) {
         StringBuilder expresion = new StringBuilder(inicio);
         int balance = 1;
-
+        
         while (!tokens.isEmpty()) {
             String nextToken = tokens.pop();
             if (nextToken.equals("(")) balance++;
@@ -74,10 +77,5 @@ public class SetqEvaluator {
         } catch (NumberFormatException e) {
             return false;
         }
-    }
-
-    public static void evaluateSetq(Stack<String> tokens, VariableManagement<Object> variableManager) {
-        SetqEvaluator evaluator = new SetqEvaluator(variableManager);
-        evaluator.evaluateSetq(tokens);
     }
 }
