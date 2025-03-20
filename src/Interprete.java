@@ -24,7 +24,7 @@ public class Interprete {
 
             while (!orderedTokens.isEmpty()) {
                 String token = orderedTokens.pop();
-                System.out.println("Token: " + token);
+                //System.out.println("Token: " + token);
 
                 if (token.equals("'") || token.equalsIgnoreCase("quote")) {
                     try {
