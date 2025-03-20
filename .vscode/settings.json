@@ -3,4 +3,5 @@
         "src", 
     ],
     "java.project.outputPath": "bin",
+    "java.debug.settings.onBuildFailureProceed": true,
 }
