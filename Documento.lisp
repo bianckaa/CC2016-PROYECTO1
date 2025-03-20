@@ -1,3 +1,3 @@
-(COND 
-  ((ATOM 'A) 'EsAtom))
-
+(cond
+  ((> 5 3) 'mayor)
+)

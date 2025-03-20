@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class CondEvaluator {
     private PredicateEvaluator predicateEvaluator;
 
-    public CondEvaluator() {
-        this.predicateEvaluator = new PredicateEvaluator();
-    }
+    public CondEvaluator(VariableManagement<Object> variableManager) {
+        this.predicateEvaluator = new PredicateEvaluator(variableManager);
+    }    
 
     public String evaluarCond(Stack<String> tokens) {
         imprimirListaTokens(tokens);

@@ -66,7 +66,4 @@ class PredicateEvaluatorTest {
         tokens.push("3");
         assertEquals("nil", evaluator.isGreaterThan(tokens), "3 > 4 regresa nil");
     }
-
-
-
 }

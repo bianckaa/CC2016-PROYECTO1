@@ -137,5 +137,4 @@ public class PredicateEvaluator {
         
         return token;
     }
-
 }

@@ -10,8 +10,8 @@ public class Interprete {
     public Interprete(String filePath) {
         controller = new DocumentControler(filePath);
         variableManager = new VariableManagement<>();
-        predicateEvaluator = new PredicateEvaluator();
-        this.condEvaluator = new CondEvaluator();
+        predicateEvaluator = new PredicateEvaluator(variableManager);
+        this.condEvaluator = new CondEvaluator(variableManager);
     }
 
     public void interpretar() {
