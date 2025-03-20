@@ -1,3 +1,4 @@
+
 import java.util.Stack;
 import java.util.Map;
 import java.util.HashMap;
@@ -6,13 +7,13 @@ public class DefunEvaluator {
 
     public static void evaluateDefun(Stack<String> tokens, VariableManagement<Object> variableManager) {
         if (tokens.size() < 4) {
-            throw new IllegalArgumentException("Error: defun requiere al menos tres argumentos (nombre, parámetros y cuerpo).");
+            throw new IllegalArgumentException("Error: defun requiere al menos tres argumentos (nombre, parametros y cuerpo).");
         }
 
         String nombreFuncion = tokens.pop();
 
         if (!tokens.peek().equals("(")) {
-            throw new IllegalArgumentException("Error: Se esperaba una lista de parámetros después del nombre de la función.");
+            throw new IllegalArgumentException("Error: Se esperaba una lista de parametros despues del nombre de la funcion.");
         }
         tokens.pop();
 
@@ -22,7 +23,7 @@ public class DefunEvaluator {
         }
 
         if (tokens.isEmpty() || !tokens.pop().equals(")")) {
-            throw new IllegalArgumentException("Error: Paréntesis no balanceados en la lista de parámetros.");
+            throw new IllegalArgumentException("Error: Parentesis no balanceados en la lista de parametros.");
         }
 
         Stack<String> cuerpo = new Stack<>();
@@ -31,7 +32,7 @@ public class DefunEvaluator {
         }
 
         if (tokens.isEmpty() || !tokens.pop().equals(")")) {
-            throw new IllegalArgumentException("Error: Paréntesis no balanceados en el cuerpo de la función.");
+            throw new IllegalArgumentException("Error: Parentesis no balanceados en el cuerpo de la funcion.");
         }
 
         
@@ -40,7 +41,7 @@ public class DefunEvaluator {
         funcion.put("cuerpo", cuerpo);
         variableManager.setVariable(nombreFuncion, funcion);
 
-        System.out.println("Función " + nombreFuncion + " definida con éxito.");
+        System.out.println("Funcion " + nombreFuncion + " definida con exito.");
     }
 
     public static double evaluarAritmetica(String operador, double a, double b) {
@@ -53,11 +54,11 @@ public class DefunEvaluator {
                 return b * a;
             case "/":
                 if (a == 0) {
-                    throw new IllegalArgumentException("Error: División por cero.");
+                    throw new IllegalArgumentException("Error: Division por cero.");
                 }
                 return b / a;
             default:
-                throw new IllegalArgumentException("Error: Operador aritmético no válido: " + operador);
+                throw new IllegalArgumentException("Error: Operador aritmetico no valido: " + operador);
         }
     }
 
@@ -93,7 +94,7 @@ public class DefunEvaluator {
         }
     
         if (valores.size() != 1) {
-            throw new IllegalArgumentException("Error: Expresión aritmética mal formada.");
+            throw new IllegalArgumentException("Error: Expresión aritmetica mal formada.");
         }
     
         return valores.pop();
@@ -108,6 +109,7 @@ public class DefunEvaluator {
         }
     }
 
+    
     private static boolean esOperadorAritmetico(String token) {
         return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/");
     }
