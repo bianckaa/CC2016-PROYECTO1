@@ -1,14 +1,29 @@
 import java.util.Stack;
 
+/**
+ * La clase SetqEvaluator maneja la asignación de valores a variables en un entorno de ejecución,
+ * permitiendo almacenar números y evaluar expresiones matemáticas.
+ */
 public class SetqEvaluator {
     private final VariableManagement<Object> variableManagement;
     private final CalculadoraAritmetica calculadora;
 
+    /**
+     * Constructor que inicializa el evaluador con un gestor de variables.
+     *
+     * @param variableManagement El gestor de variables donde se almacenarán los valores asignados.
+     */
     public SetqEvaluator(VariableManagement<Object> variableManagement) {
         this.variableManagement = variableManagement;
         this.calculadora = new CalculadoraAritmetica();
     }
 
+    /**
+     * Evalúa una expresión de asignación (setq) y almacena el resultado en la variable correspondiente.
+     *
+     * @param tokens Pila de tokens que representan la instrucción setq.
+     * @throws IllegalArgumentException Si la cantidad de parámetros es incorrecta o el valor no es válido.
+     */
     public void evaluateSetq(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: setq necesita al menos dos parámetros (variable y valor)");
@@ -49,6 +64,13 @@ public class SetqEvaluator {
         }
     }
 
+    /**
+     * Extrae una expresión matemática de la pila de tokens, asegurando que los paréntesis estén balanceados.
+     *
+     * @param tokens Pila de tokens.
+     * @param inicio Primer token de la expresión.
+     * @return La expresión completa en formato de cadena.
+     */
     private String extraerExpresion(Stack<String> tokens, String inicio) {
         StringBuilder expresion = new StringBuilder(inicio);
         int balance = 1;
@@ -63,6 +85,12 @@ public class SetqEvaluator {
         return expresion.toString();
     }
 
+    /**
+     * Elimina los paréntesis exteriores de una expresión si están presentes.
+     *
+     * @param expresion La expresión matemática en formato de cadena.
+     * @return La expresión sin paréntesis exteriores.
+     */
     private String limpiarParentesis(String expresion) {
         if (expresion.startsWith("(") && expresion.endsWith(")")) {
             return expresion.substring(1, expresion.length() - 1).trim();
@@ -70,6 +98,12 @@ public class SetqEvaluator {
         return expresion;
     }
 
+    /**
+     * Verifica si un token representa un número válido.
+     *
+     * @param token El token a evaluar.
+     * @return {@code true} si el token es un número válido, {@code false} en caso contrario.
+     */
     private boolean esNumeroValido(String token) {
         try {
             Double.parseDouble(token);
