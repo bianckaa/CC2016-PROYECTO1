@@ -1,3 +1,4 @@
+import java.util.Map;
 import java.util.Stack;
 
 public class Interprete {
@@ -46,6 +47,14 @@ public class Interprete {
                     }
                 }
 
+                else if (token.equals("defun")) {
+                    try {
+                        DefunEvaluator.evaluateDefun(orderedTokens, variableManager);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Error en defun: " + e.getMessage());
+                    }
+                }
+
                 else if (esPredicado(token)) {
                     try {
                         Object result = predicateEvaluator.evaluarPredicado(token, orderedTokens);
@@ -59,6 +68,27 @@ public class Interprete {
                     String resultado = condEvaluator.evaluarCond(orderedTokens);
                     System.out.println("Resultado de COND: " + resultado);
                 }
+
+                else if (variableManager.getVariable(token) != null) {
+                    
+                    Map<String, Object> funcion = (Map<String, Object>) variableManager.getVariable(token);
+                    Stack<String> parametros = (Stack<String>) funcion.get("parametros");
+                    Stack<String> cuerpo = (Stack<String>) funcion.get("cuerpo");
+                
+                    for (String parametro : parametros) {
+                        if (orderedTokens.isEmpty()) {
+                            throw new IllegalArgumentException("Error: Faltan argumentos para la función " + token);
+                        }
+                        String valor = orderedTokens.pop();
+                        variableManager.setVariable(parametro, valor);
+                    }
+                
+                   
+                    double resultado = DefunEvaluator.evaluarExpresionAritmetica(cuerpo, variableManager);
+                    System.out.println("Resultado de la función " + token + ": " + resultado);
+                }
+
+                
 
                 // Otras implementaciones (Defun, COND, etc.)
             }

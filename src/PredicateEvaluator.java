@@ -1,6 +1,12 @@
 import java.util.Stack;
 
 public class PredicateEvaluator {
+    private VariableManagement<Object> variableManager;
+
+
+    public PredicateEvaluator(VariableManagement<Object> variableManager) {
+        this.variableManager = variableManager;
+    }
 
     public Object evaluarPredicado(String predicado, Stack<String> tokens) {
         switch (predicado) {
@@ -19,7 +25,7 @@ public class PredicateEvaluator {
         }
     }
 
-    private String isAtom(Stack<String> tokens) {
+    public String isAtom(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: ATOM necesita un argumento.");
         }
@@ -41,7 +47,7 @@ public class PredicateEvaluator {
         return "T";
     }
 
-    private String isList(Stack<String> tokens) {
+    public String isList(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: LIST necesita un argumento.");
         }
@@ -55,13 +61,13 @@ public class PredicateEvaluator {
         return expresion.startsWith("(") ? "T" : "nil";
     }
 
-    private String isEqual(Stack<String> tokens) {
+    public String isEqual(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: EQUAL necesita dos argumentos.");
         }
 
-        String expresion2 = tokens.pop();
-        String expresion1 = tokens.pop();
+        String expresion2 = obtenerValor(tokens.pop());
+        String expresion1 = obtenerValor(tokens.pop());
 
         if (expresion1.equals("'")) {
             expresion1 = tokens.pop();
@@ -73,13 +79,13 @@ public class PredicateEvaluator {
         return expresion1.equals(expresion2) ? "T" : "nil";
     }
 
-    private String isLessThan(Stack<String> tokens) {
+    public String isLessThan(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: < necesita dos argumentos.");
         }
 
-        String expresion2 = tokens.pop();
-        String expresion1 = tokens.pop();
+        String expresion2 = obtenerValor(tokens.pop());
+        String expresion1 = obtenerValor(tokens.pop());
 
         if (expresion1.equals("'")) {
             expresion1 = tokens.pop();
@@ -91,19 +97,19 @@ public class PredicateEvaluator {
         try {
             double num1 = Double.parseDouble(expresion1);
             double num2 = Double.parseDouble(expresion2);
-            return num1 > num2 ? "T" : "nil";
+            return num2 < num1 ? "T" : "nil";
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Error: < solo acepta valores numericos.");
         }
     }
 
-    private String isGreaterThan(Stack<String> tokens) {
+    public String isGreaterThan(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: > necesita dos argumentos.");
         }
 
-        String expresion2 = tokens.pop();
-        String expresion1 = tokens.pop();
+        String expresion2 = obtenerValor(tokens.pop());
+        String expresion1 = obtenerValor(tokens.pop());
 
         if (expresion1.equals("'")) {
             expresion1 = tokens.pop();
@@ -115,9 +121,21 @@ public class PredicateEvaluator {
         try {
             double num1 = Double.parseDouble(expresion1);
             double num2 = Double.parseDouble(expresion2);
-            return num1 < num2 ? "T" : "nil";
+            return num2 > num1 ? "T" : "nil";
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Error: > solo acepta valores numericos.");
         }
+        
     }
+    public String obtenerValor(String token) {
+       
+        Object valorVariable = variableManager.getVariable(token);
+        if (valorVariable != null) {
+            return valorVariable.toString(); 
+        }
+
+        
+        return token;
+    }
+
 }
