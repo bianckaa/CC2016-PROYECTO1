@@ -179,7 +179,9 @@ public class CondEvaluator {
             System.out.println("Acción extraída (invertida): " + accionInvertida);
     
             return evaluarOperacionMatematica(accionInvertida);
-        } return token;
+        } else if (token.equals("quote") && !tokens.isEmpty()) {
+            return tokens.pop();
+        }  return token;
     }
     
 
