@@ -1,4 +1,4 @@
 (cond
-    ((EQUAL 0 0) ' 1)
+    ((EQUAL 10 0) ' 1)
     (t ' SISECUMPLIOOOOOOOOO)
     )

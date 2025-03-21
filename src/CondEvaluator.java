@@ -24,45 +24,38 @@ public class CondEvaluator {
                 String condicion = extraerExpresion(tokens);
                 System.out.println("Condición extraída: " + condicion);
 
-                
                 if (condicion.trim().equalsIgnoreCase("t")) {
                     String accion = extraerAccion(tokens);
                     System.out.println("Caso por defecto, acción extraída: " + accion);
+                    tokens.clear(); 
                     return accion; 
                 }
 
                 String resultadoCondicion = evaluarCondicion(condicion, tokens);
                 System.out.println("Resultado de la condición: " + resultadoCondicion);
 
-                if (resultadoCondicion.equals("T")) {
+                if (resultadoCondicion.equalsIgnoreCase("T")) {
                     String accion = extraerAccion(tokens);
                     System.out.println("Acción extraída: " + accion);
-
-                    
-                    eliminarTokensHastaApertura(tokens);
+                    tokens.clear(); 
                     return accion; 
                 } else {
-                    descartarExpresion(tokens);
-                    System.out.println("Condición falsa, descartando acción...");
+                    eliminarTokensHastaSiguienteApertura(tokens);
+                    System.out.println("Condición falsa, descartando acción y buscando siguiente condición...");
                 }
             } else if (token.equals(")")) {
                 break;
             }
         }
-        return "nil";
+        return "nil"; 
     }
 
-    private void eliminarTokensHastaApertura(Stack<String> tokens) {
-        int balance = 1; 
+    private void eliminarTokensHastaSiguienteApertura(Stack<String> tokens) {
         while (!tokens.isEmpty()) {
             String token = tokens.pop();
             if (token.equals("(")) {
-                balance--;
-                if (balance == 0) {
-                    break; 
-                }
-            } else if (token.equals(")")) {
-                balance++;
+                tokens.push(token); 
+                break;
             }
         }
     }
@@ -155,27 +148,6 @@ public class CondEvaluator {
         }
 
         return expresion.toString().trim();
-    }
-
-    private void descartarExpresion(Stack<String> tokens) {
-        int balance = 0;
-
-        while (!tokens.isEmpty()) {
-            String token = tokens.pop();
-
-            if (token.equals("(")) {
-                balance++;
-            } else if (token.equals(")")) {
-                balance--;
-                if (balance < 0) {
-                    break;
-                }
-            }
-
-            if (balance == 0) {
-                break;
-            }
-        }
     }
 
     private String extraerAccion(Stack<String> tokens) {
