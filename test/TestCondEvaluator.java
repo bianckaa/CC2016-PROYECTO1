@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Stack;
 
 public class TestCondEvaluator {
-        /**
+    /**
      * Test que verifica el comportamiento básico de evaluarCOND con una condición verdadera.
      */
     @Test

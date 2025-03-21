@@ -2,7 +2,6 @@
  * Clase principal que inicia la ejecución del intérprete de Lisp.
  */
 public class Main {
-
     /**
      * Método principal que crea una instancia del intérprete y procesa el archivo Lisp.
      *

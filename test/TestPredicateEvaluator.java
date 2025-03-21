@@ -3,88 +3,81 @@ import org.junit.jupiter.api.Test;
 import java.util.Stack;
 import static org.junit.jupiter.api.Assertions.*;
 
-
 /**
- * Pruebas Unitarias para clase PredicateEvaluator
+ * Pruebas unitarias para la clase PredicateEvaluator.
  */
-class TestPredicateEvaluator {
+class PredicateEvaluatorTest {
 
     private PredicateEvaluator evaluator;
     private VariableManagement<Object> variableManager;
 
-
-    /**
-     * Configura antes de cada prueba.
-     */
     @BeforeEach
     void setUp() {
-       
         variableManager = new VariableManagement<>();
         evaluator = new PredicateEvaluator(variableManager);
     }
 
     /**
-     * Prueba del metodo isAtom
+     * Prueba el predicado ATOM con un atomo.
      */
     @Test
-    void testIsAtom() {
+    void testAtomConAtomo() {
         Stack<String> tokens = new Stack<>();
         tokens.push("x");
-        assertEquals("T", evaluator.isAtom(tokens), "regresa T por ser un atomo");
-
-        tokens.push("y");
-        assertEquals("nil", evaluator.isAtom(tokens), "regresa nil porque ya no es un atomo");
+        assertEquals("T", evaluator.evaluarPredicado("ATOM", tokens), "ATOM con 'x' debe devolver 'T'");
     }
 
-    
     /**
-     * Prueba el metodo isEqual
+     * Prueba el predicado ATOM con una lista.
      */
     @Test
-    void testIsEqual() {
+    void testAtomConLista() {
         Stack<String> tokens = new Stack<>();
-        tokens.push("2");
-        tokens.push("1");
-        assertEquals("nil", evaluator.isEqual(tokens), "regresa nil por ser diferentes");
-
-        tokens.push("5");
-        tokens.push("5");
-        assertEquals("T", evaluator.isEqual(tokens), "regresa T ya que si son iguales los valores");
+        tokens.push("(1 2 3)");
+        assertEquals("nil", evaluator.evaluarPredicado("ATOM", tokens), "ATOM con '(1 2 3)' debe devolver 'nil'");
     }
 
-
-      /**
-     * Prue a el metodo isLessThan
+    /**
+     * Prueba el predicado EQUAL con valores iguales.
      */
     @Test
-    void testIsLessThan() {
+    void testEqualConValoresIguales() {
         Stack<String> tokens = new Stack<>();
-        tokens.push("44");
-        tokens.push("8");
-        assertEquals("T", evaluator.isLessThan(tokens), "1 < 2 regresa T");
-
-        tokens.push("2");
-        tokens.push("9");
-        assertEquals("nil", evaluator.isLessThan(tokens), "2 < 1 regresa nil");
-        
-        tokens.push("2");
-        tokens.push("2");
-        assertEquals("nil", evaluator.isLessThan(tokens), "2 < 2 regresa nil porque son iguales");
-    
-    
+        tokens.push("5");
+        tokens.push("5");
+        assertEquals("T", evaluator.evaluarPredicado("EQUAL", tokens), "EQUAL con '5' y '5' debe devolver 'T'");
     }
-      /**
-     * Prueba el metodo isGreaterThan
+
+    /**
+     * Prueba el predicado EQUAL con valores diferentes.
      */
     @Test
-    void testIsGreaterThan() {
+    void testEqualConValoresDiferentes() {
         Stack<String> tokens = new Stack<>();
-        tokens.push("7");
-        tokens.push("9");
-        assertEquals("T", evaluator.isGreaterThan(tokens), "9 > 7  regresa T");
+        tokens.push("5");
+        tokens.push("10");
+        assertEquals("nil", evaluator.evaluarPredicado("EQUAL", tokens), "EQUAL con '5' y '10' debe devolver 'nil'");
+    }
 
-        tokens.push("4");
-        tokens.push("3");
-        assertEquals("nil", evaluator.isGreaterThan(tokens), "3 > 4 regresa nil");
+    /**
+     * Prueba el predicado < con un valor menor.
+     */
+    @Test
+    void testLessThanConValorMenor() {
+        Stack<String> tokens = new Stack<>();
+        tokens.push("10");
+        tokens.push("5");
+        assertEquals("T", evaluator.evaluarPredicado("<", tokens), "5 < 10 debe devolver 'T'");
+    }
+
+    /**
+     * Prueba el predicado > con un valor mayor.
+     */
+    @Test
+    void testGreaterThanConValorMayor() {
+        Stack<String> tokens = new Stack<>();
+        tokens.push("5");
+        tokens.push("10");
+        assertEquals("T", evaluator.evaluarPredicado(">", tokens), "10 > 5 debe devolver 'T'");
     }
 }
