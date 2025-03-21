@@ -1,2 +1,3 @@
-(cond ((> 5 3) 'es-mayor)
-        (t 'es-igual))
+(cond 
+  ((EQUAL 0 0) ' (ES CERO)) 
+  (t (* 5 6 )))
