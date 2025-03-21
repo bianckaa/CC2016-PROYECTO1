@@ -1,4 +1,3 @@
 (cond
-    ((EQUAL 10 0) ' 1)
-    (t ' SISECUMPLIOOOOOOOOO)
-    )
+    ((EQUAL 88 0) ' 1)
+    (t (+ (5 (- 2 1)) (5 (- 2 2)))))
