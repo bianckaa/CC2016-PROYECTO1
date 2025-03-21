@@ -1,3 +1,4 @@
-(cond 
-  ((EQUAL 0 0) ' (ES CERO)) 
-  (t (* 5 6 )))
+(defun perimetro-cuadrado (lado)
+  (* 4 lado)
+)
+(perimetro-cuadrado 6)
