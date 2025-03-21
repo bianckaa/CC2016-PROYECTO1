@@ -1,6 +1,21 @@
 import java.util.Stack;
 
+/**
+ * La clase {@code CalculadoraAritmetica} permite evaluar expresiones aritméticas utilizando una pila de tokens.
+ * Los operadores soportados son: suma (+), resta (-), multiplicación (*), división (/) y módulo (%).
+ * La expresión debe estar representada en forma de tokens, siendo el primer token un operador seguido de los operandos.
+ */
 public class CalculadoraAritmetica {
+
+    /**
+     * Evalúa una expresión aritmética representada por una pila de tokens.
+     * Los tokens deben consistir en un operador seguido de los operandos.
+     * 
+     * @param tokens La pila de tokens que representa la expresión aritmética.
+     * @return El resultado de la operación aritmética.
+     * @throws IllegalArgumentException Si la pila de tokens está vacía o si el operador no es válido.
+     * @throws ArithmeticException Si ocurre una división por cero.
+     */
     public Double evaluar(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: Expresión vacía");
@@ -52,7 +67,14 @@ public class CalculadoraAritmetica {
         return resultado;
     }
 
+    /**
+     * Verifica si un token es un operador válido.
+     * 
+     * @param token El token que se va a verificar.
+     * @return {@code true} si el token es un operador válido, {@code false} en caso contrario.
+     */
     private boolean esOperadorValido(String token) {
         return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/") || token.equals("%");
     }
 }
+
