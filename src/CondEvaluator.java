@@ -154,12 +154,46 @@ public class CondEvaluator {
         if (tokens.isEmpty()) {
             return "nil";
         }
-
+    
         String token = tokens.pop();
-        
-        if (token.equals("quote") && !tokens.isEmpty()) {
-            return tokens.pop();
-        }  
-        return token;
+    
+        if (token.equals("(")) {
+            StringBuilder accion = new StringBuilder();
+            int balance = 1; 
+    
+            while (!tokens.isEmpty() && balance > 0) {
+                String subToken = tokens.pop();
+                if (subToken.equals("(")) {
+                    balance++;
+                } else if (subToken.equals(")")) {
+                    balance--;
+                    if (balance == 0) {
+                        break;
+                    }
+                }
+                accion.append(subToken).append(" ");
+            }
+    
+            String accionStr = accion.toString().trim();
+            String accionInvertida = new StringBuilder(accionStr).reverse().toString();
+            System.out.println("Acción extraída (invertida): " + accionInvertida);
+    
+            return evaluarOperacionMatematica(accionInvertida);
+        } return token;
+    }
+    
+
+    private String evaluarOperacionMatematica(String accion) {
+        Stack<String> tokensOperacion = new Stack<>();
+        String[] partes = accion.split(" ");
+    
+        for (String parte : partes) {
+            tokensOperacion.push(parte);
+        }
+    
+        CalculadoraAritmetica calculadora = new CalculadoraAritmetica();
+        Double resultado = calculadora.evaluar(tokensOperacion);
+    
+        return String.valueOf(resultado); 
     }
 }
