@@ -2,7 +2,6 @@
  * La clase QuoteEvaluator proporciona un método para evaluar expresiones de cita en LISP.
  */
 public class QuoteEvaluator {
-
     /**
      * Evalúa una expresión de cita y la devuelve sin modificaciones.
      *
@@ -13,4 +12,3 @@ public class QuoteEvaluator {
         return expression;
     }
 }
-

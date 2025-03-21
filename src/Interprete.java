@@ -41,8 +41,8 @@ public class Interprete {
 
                 else if (token.equalsIgnoreCase("setq")) {
                     try {
-                        SetqEvaluator setqEvaluator = new SetqEvaluator(variableManager);  // Crear instancia
-                        setqEvaluator.evaluateSetq(orderedTokens);  // Llamar con un solo parámetro
+                        SetqEvaluator setqEvaluator = new SetqEvaluator(variableManager);  
+                        setqEvaluator.evaluateSetq(orderedTokens);  
                     } catch (IllegalArgumentException e) {
                         System.err.println("Error en setq: " + e.getMessage());
                     }

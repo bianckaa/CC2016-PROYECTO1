@@ -91,7 +91,7 @@ public class PredicateEvaluator {
      * @param tokens Pila de tokens.
      * @return "T" si el primer número es menor que el segundo, "nil" en caso contrario.
      */
-    private String isLessThan(Stack<String> tokens) {
+    String isLessThan(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: < necesita dos argumentos.");
         }
