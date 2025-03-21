@@ -7,7 +7,6 @@ import java.util.Stack;
  * Utiliza un evaluador de predicados para determinar si una condición es verdadera y ejecuta la acción correspondiente.
  */
 public class CondEvaluator {
-    
     private PredicateEvaluator predicateEvaluator;
 
     /**
@@ -233,6 +232,7 @@ public class CondEvaluator {
             return evaluarOperacionMatematica(accionInvertida);
         } else if (token.equals("quote") && !tokens.isEmpty()) {
             return tokens.pop();
+            
         }  return token;
     }
     
