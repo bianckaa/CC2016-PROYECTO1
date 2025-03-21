@@ -8,7 +8,7 @@ public class Main {
      * @param args Argumentos de línea de comandos (no utilizados).
      */
     public static void main(String[] args) {
-        String filePath = "Documento.lisp";
+        String filePath = "Quote.lisp";
         Interprete interprete = new Interprete(filePath);
 
         interprete.interpretar();
