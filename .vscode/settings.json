@@ -1,7 +1,11 @@
 {
     "java.project.sourcePaths": [
         "src", 
+        "test"
     ],
     "java.project.outputPath": "bin",
     "java.debug.settings.onBuildFailureProceed": true,
+    "java.test.include": [
+        "test/*.java"
+    ]
 }

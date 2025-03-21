@@ -1,6 +1,17 @@
 import java.util.Stack;
 
+/**
+ * Clase encargada de dividir un código en tokens, basándose en las reglas definidas.
+ * Procesa cadenas de texto en un formato específico y las convierte en una pila de tokens 
+ * para su que despues ser evaluadas.
+ */
 public class Tokenizador2{
+    /**
+     * Convierte el código obtenido en una pila de tokens.
+     *
+     * @param code el código obtenido como cadena de texto.
+     * @return Una pila de tokens representados como cadenas.
+     */
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
         int i = 0;
@@ -197,6 +208,14 @@ public class Tokenizador2{
         return tokens;
     }
 
+    /**
+     * Maneja los casos especiales de la palabra clave 'quote'.
+     * 
+     * @param code El código recibido como cadena de texto.
+     * @param startIndex El índice inicial donde comienza a procesarse 'quote'.
+     * @param tokens La pila de tokens donde se almacenan los resultados.
+     * @return El índice actualizado después de procesar el 'quote'.
+     */
     private int tokenizationQuote(String code, int startIndex, Stack<String> tokens) {
         int i = startIndex;
         int n = code.length();
@@ -244,9 +263,13 @@ public class Tokenizador2{
         return i; 
     }
 
+    /**
+     * Verifica si un token es un operador válido.
+     *
+     * @param token El token a verificar.
+     * @return Verdadero si el token es un operador, falso de lo contrario.
+     */
     public boolean esOperadorValido(String token) {
         return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/") || token.equals("%");
-
-}
-
+    }
 }

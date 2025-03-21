@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * Pruebas unitarias para la clase CalculadoraAritmetica.
  */
 class TestCalculadoraAritmetica {
-
     private CalculadoraAritmetica calculadora;
 
     @BeforeEach
