@@ -3,11 +3,19 @@ import org.junit.jupiter.api.Test;
 import java.util.Stack;
 import static org.junit.jupiter.api.Assertions.*;
 
-class PredicateEvaluatorTest {
+
+/**
+ * Pruebas Unitarias para clase PredicateEvaluator
+ */
+class TestPredicateEvaluator {
 
     private PredicateEvaluator evaluator;
     private VariableManagement<Object> variableManager;
 
+
+    /**
+     * Configura antes de cada prueba.
+     */
     @BeforeEach
     void setUp() {
        
@@ -15,6 +23,9 @@ class PredicateEvaluatorTest {
         evaluator = new PredicateEvaluator(variableManager);
     }
 
+    /**
+     * Prueba del metodo isAtom
+     */
     @Test
     void testIsAtom() {
         Stack<String> tokens = new Stack<>();
@@ -25,6 +36,10 @@ class PredicateEvaluatorTest {
         assertEquals("nil", evaluator.isAtom(tokens), "regresa nil porque ya no es un atomo");
     }
 
+    
+    /**
+     * Prueba el metodo isEqual
+     */
     @Test
     void testIsEqual() {
         Stack<String> tokens = new Stack<>();
@@ -37,6 +52,10 @@ class PredicateEvaluatorTest {
         assertEquals("T", evaluator.isEqual(tokens), "regresa T ya que si son iguales los valores");
     }
 
+
+      /**
+     * Prue a el metodo isLessThan
+     */
     @Test
     void testIsLessThan() {
         Stack<String> tokens = new Stack<>();
@@ -54,7 +73,9 @@ class PredicateEvaluatorTest {
     
     
     }
-
+      /**
+     * Prueba el metodo isGreaterThan
+     */
     @Test
     void testIsGreaterThan() {
         Stack<String> tokens = new Stack<>();

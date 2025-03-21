@@ -1,13 +1,31 @@
+/**
+ * Clase que evalúa predicados en expresiones Lisp simuladas.
+ */
 import java.util.Stack;
 
+/**
+ * Clase que permite evaluar predicados en una estructura de tokens.
+ */
 public class PredicateEvaluator {
     private VariableManagement<Object> variableManager;
 
-
+    /**
+     * Constructor de la clase PredicateEvaluator.
+     * 
+     * @param variableManager Gestor de variables utilizado en la evaluación.
+     */
     public PredicateEvaluator(VariableManagement<Object> variableManager) {
         this.variableManager = variableManager;
     }
 
+    /**
+     * Evalúa un predicado específico con los tokens proporcionados.
+     * 
+     * @param predicado Nombre del predicado a evaluar.
+     * @param tokens Pila de tokens sobre la cual se evaluará el predicado.
+     * @return Resultado de la evaluación del predicado.
+     * @throws IllegalArgumentException Si el predicado no es válido.
+     */
     public Object evaluarPredicado(String predicado, Stack<String> tokens) {
         predicado = predicado.toUpperCase();
         
@@ -23,120 +41,92 @@ public class PredicateEvaluator {
             case ">":
                 return isGreaterThan(tokens);
             default:
-                throw new IllegalArgumentException("Predicado no valido: " + predicado);
+                throw new IllegalArgumentException("Predicado no válido: " + predicado);
         }
     }
 
-    public String isAtom(Stack<String> tokens) {
+    /**
+     * Determina si un token es un átomo.
+     * 
+     * @param tokens Pila de tokens.
+     * @return "T" si es un átomo, "nil" en caso contrario.
+     */
+    private String isAtom(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: ATOM necesita un argumento.");
         }
-
         String expresion = tokens.pop();
-
-        if (expresion.startsWith("(")) {
-            return "nil";
-        }
-
-        if (expresion.equals("'")) {
-            expresion = tokens.pop();
-        }
-
-        if (expresion.startsWith("(")) {
-            return "nil";
-        }
-
-        return "T";
+        return expresion.startsWith("(") ? "nil" : "T";
     }
 
-    public String isList(Stack<String> tokens) {
+    /**
+     * Determina si un token representa una lista.
+     * 
+     * @param tokens Pila de tokens.
+     * @return "T" si es una lista, "nil" en caso contrario.
+     */
+    private String isList(Stack<String> tokens) {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Error: LIST necesita un argumento.");
         }
-
-        String expresion = tokens.pop();
-
-        if (expresion.equals("'")) {
-            expresion = tokens.pop();
-        }
-
-        return expresion.startsWith("(") ? "T" : "nil";
+        return tokens.pop().startsWith("(") ? "T" : "nil";
     }
 
-    public String isEqual(Stack<String> tokens) {
+    /**
+     * Determina si dos expresiones son iguales.
+     * 
+     * @param tokens Pila de tokens.
+     * @return "T" si son iguales, "nil" en caso contrario.
+     */
+    private String isEqual(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: EQUAL necesita dos argumentos.");
         }
-
-        String expresion2 = obtenerValor(tokens.pop());
-        String expresion1 = obtenerValor(tokens.pop());
-
-        if (expresion1.equals("'")) {
-            expresion1 = tokens.pop();
-        }
-        if (expresion2.equals("'")) {
-            expresion2 = tokens.pop();
-        }
-
-        return expresion1.equals(expresion2) ? "T" : "nil";
+        return obtenerValor(tokens.pop()).equals(obtenerValor(tokens.pop())) ? "T" : "nil";
     }
 
-    public String isLessThan(Stack<String> tokens) {
+    /**
+     * Determina si un número es menor que otro.
+     * 
+     * @param tokens Pila de tokens.
+     * @return "T" si el primer número es menor que el segundo, "nil" en caso contrario.
+     */
+    private String isLessThan(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: < necesita dos argumentos.");
         }
-
-        String expresion2 = obtenerValor(tokens.pop());
-        String expresion1 = obtenerValor(tokens.pop());
-
-        if (expresion1.equals("'")) {
-            expresion1 = tokens.pop();
-        }
-        if (expresion2.equals("'")) {
-            expresion2 = tokens.pop();
-        }
-
         try {
-            double num1 = Double.parseDouble(expresion1);
-            double num2 = Double.parseDouble(expresion2);
-            return num2 < num1 ? "T" : "nil";
+            return Double.parseDouble(obtenerValor(tokens.pop())) < Double.parseDouble(obtenerValor(tokens.pop())) ? "T" : "nil";
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Error: < solo acepta valores numericos.");
+            throw new IllegalArgumentException("Error: < solo acepta valores numéricos.");
         }
     }
 
-    public String isGreaterThan(Stack<String> tokens) {
+    /**
+     * Determina si un número es mayor que otro.
+     * 
+     * @param tokens Pila de tokens.
+     * @return "T" si el primer número es mayor que el segundo, "nil" en caso contrario.
+     */
+    private String isGreaterThan(Stack<String> tokens) {
         if (tokens.size() < 2) {
             throw new IllegalArgumentException("Error: > necesita dos argumentos.");
         }
-
-        String expresion2 = obtenerValor(tokens.pop());
-        String expresion1 = obtenerValor(tokens.pop());
-
-        if (expresion1.equals("'")) {
-            expresion1 = tokens.pop();
-        }
-        if (expresion2.equals("'")) {
-            expresion2 = tokens.pop();
-        }
-
         try {
-            double num1 = Double.parseDouble(expresion1);
-            double num2 = Double.parseDouble(expresion2);
-            return num2 > num1 ? "T" : "nil";
+            return Double.parseDouble(obtenerValor(tokens.pop())) > Double.parseDouble(obtenerValor(tokens.pop())) ? "T" : "nil";
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Error: > solo acepta valores numericos.");
+            throw new IllegalArgumentException("Error: > solo acepta valores numéricos.");
         }
-        
     }
-    public String obtenerValor(String token) {
-       
+    
+    /**
+     * Obtiene el valor de un token, considerando si es una variable almacenada.
+     * 
+     * @param token Token a evaluar.
+     * @return Valor del token o su representación original.
+     */
+    private String obtenerValor(String token) {
         Object valorVariable = variableManager.getVariable(token);
-        if (valorVariable != null) {
-            return valorVariable.toString(); 
-        }
-
-        
-        return token;
+        return (valorVariable != null) ? valorVariable.toString() : token;
     }
 }

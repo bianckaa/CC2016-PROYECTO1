@@ -1,4 +1,5 @@
 import java.util.Stack;
+
 public class Tokenizador2{
     public Stack<String> tokenize(String code) {
         Stack<String> tokens = new Stack<>();
@@ -242,4 +243,10 @@ public class Tokenizador2{
         } 
         return i; 
     }
+
+    public boolean esOperadorValido(String token) {
+        return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/") || token.equals("%");
+
+}
+
 }
